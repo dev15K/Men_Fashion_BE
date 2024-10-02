@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
-final class CategoryStatus extends Enum
+final class ProductStatus extends Enum
 {
     const ACTIVE = 'ĐANG HOẠT ĐỘNG';
     const INACTIVE = 'KHÔNG HOẠT ĐỘNG';

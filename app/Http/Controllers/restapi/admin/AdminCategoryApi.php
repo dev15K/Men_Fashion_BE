@@ -32,7 +32,8 @@ class AdminCategoryApi extends Controller
         $categories = Categories::where('status', '!=', CategoryStatus::DELETED)
             ->orderBy('id', 'desc')
             ->get();
-        return response()->json($categories);
+        $data = returnMessage(1, $categories, 'Success!');
+        return response()->json($data, 200);
     }
 
     /**
@@ -75,7 +76,8 @@ class AdminCategoryApi extends Controller
             return response()->json($data, 404);
         }
 
-        return response()->json($category);
+        $data = returnMessage(1, $category, 'Success!');
+        return response()->json($data, 200);
     }
 
     /**
