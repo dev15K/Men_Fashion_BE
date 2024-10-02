@@ -36,15 +36,18 @@ class AuthApi extends Controller
 
             $user = User::where('email', $loginRequest)->orWhere('phone', $loginRequest)->first();
             if (!$user) {
-                return response($newController->returnMessage('User not found!'), 404);
-            } else {
-                if ($user->status == UserStatus::INACTIVE) {
-                    return response($newController->returnMessage('User not active!'), 400);
-                } else if ($user->status == UserStatus::BLOCKED) {
-                    return response($newController->returnMessage('User has been blocked!'), 400);
-                } else if ($user->status == UserStatus::DELETED) {
-                    return response($newController->returnMessage('User is deleted!'), 400);
-                }
+                return response($newController->returnMessage('Không tìm thấy tài khoản!'), 404);
+            }
+            if ($user->status == UserStatus::INACTIVE) {
+                return response($newController->returnMessage('Tài khoản chưa được kích hoạt!'), 400);
+            }
+
+            if ($user->status == UserStatus::BLOCKED) {
+                return response($newController->returnMessage('Tài khoản đã bị khoá!'), 400);
+            }
+
+            if ($user->status == UserStatus::DELETED) {
+                return response($newController->returnMessage('Tài khoản đã bị xoá!'), 400);
             }
 
             if (Auth::attempt($credentials)) {
@@ -58,7 +61,7 @@ class AuthApi extends Controller
                 $response['accessToken'] = $token;
                 return response()->json($response);
             }
-            return response()->json($newController->returnMessage('Login fail! Please check email or password'), 400);
+            return response()->json($newController->returnMessage('Thất bại, Vui lòng kiểm tra lại tài khoản hoặc mật khẩu!'), 400);
         } catch (\Exception $exception) {
             return response($newController->returnMessage($exception->getMessage()), 400);
         }
@@ -76,25 +79,25 @@ class AuthApi extends Controller
 
             $isEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
             if (!$isEmail) {
-                return response($newController->returnMessage('Email invalid!'), 400);
+                return response($newController->returnMessage('Email không hợp lệ!'), 400);
             }
 
             $is_valid = User::checkEmail($email);
             if (!$is_valid) {
-                return response($newController->returnMessage('Email already exited!'), 400);
+                return response($newController->returnMessage('Email đã được sử dụng!'), 400);
             }
 
             $is_valid = User::checkPhone($phone);
             if (!$is_valid) {
-                return response($newController->returnMessage('Phone already exited!'), 400);
+                return response($newController->returnMessage('Số điện thoại đã được sử dụng!'), 400);
             }
 
             if ($password != $password_confirm) {
-                return response($newController->returnMessage('Password or Password Confirm incorrect!'), 400);
+                return response($newController->returnMessage('Mật khẩu và mật khẩu xác nhận không chính xác!'), 400);
             }
 
             if (strlen($password) < 5) {
-                return response($newController->returnMessage('Password invalid!'), 400);
+                return response($newController->returnMessage('Mật khẩu không hợp lệ!'), 400);
             }
 
             $passwordHash = Hash::make($password);
@@ -116,9 +119,9 @@ class AuthApi extends Controller
             $newController->saveRoleUser($user->id);
 
             if ($success) {
-                return response($newController->returnMessage('Register success!'), 200);
+                return response($newController->returnMessage('Đăng ký thành công!'), 200);
             }
-            return response($newController->returnMessage('Register failed!'), 400);
+            return response($newController->returnMessage('Đăng ký thất bại!'), 400);
         } catch (\Exception $exception) {
             return response($newController->returnMessage($exception->getMessage()), 400);
         }
@@ -128,7 +131,7 @@ class AuthApi extends Controller
     {
         $newController = (new MainController());
         try {
-            return response($newController->returnMessage('Logout success!'), 200);
+            return response($newController->returnMessage('Đăng xuất thành công!'), 200);
         } catch (\Exception $exception) {
             return response($newController->returnMessage($exception->getMessage()), 400);
         }
