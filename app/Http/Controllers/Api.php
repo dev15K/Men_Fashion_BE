@@ -19,7 +19,6 @@ use OpenApi\Annotations as OA;
  *      description="Enter JWT token to access this API"
  *  )
  *
- * security={{"bearerAuth": {}}},
  */
 class Api extends BaseController
 {
