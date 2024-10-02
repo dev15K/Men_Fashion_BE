@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\restapi\UserApi;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => ''], function () {
-
+Route::group(['prefix' => 'users'], function () {
+    Route::get('get-info', [UserApi::class, 'getUserFromToken'])->name('api.auth.users.information');
 });

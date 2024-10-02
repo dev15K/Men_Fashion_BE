@@ -192,32 +192,35 @@ class AdminCategoryApi extends Api
      *         )
      *     ),
      *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Property(
-     *                 property="name",
-     *                 type="string",
-     *                 description="Name of the category"
-     *             ),
-     *             @OA\Property(
-     *                 property="parent_id",
-     *                 type="integer",
-     *                 description="Parent category ID"
-     *             ),
-     *             @OA\Property(
-     *                 property="thumbnail",
-     *                 type="string",
-     *                 format="binary",
-     *                 description="Thumbnail of the category"
-     *             ),
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="integer",
-     *                 description="Status of the category"
-     *             )
-     *         )
-     *     ),
+     * *         required=true,
+     * *         @OA\MediaType(
+     * *             mediaType="multipart/form-data",
+     * *             @OA\Schema(
+     * *                 @OA\Property(
+     * *                     property="name",
+     * *                     type="string",
+     * *                     description="Name of the category"
+     * *                 ),
+     * *                 @OA\Property(
+     * *                     property="parent_id",
+     * *                     type="integer",
+     * *                     description="Parent category ID"
+     * *                 ),
+     * *                 @OA\Property(
+     * *                     property="status",
+     * *                     type="integer",
+     * *                     enum={1, 2, 3},
+     * *                     description="Status of the category"
+     * *                 ),
+     * *                 @OA\Property(
+     * *                     property="thumbnail",
+     * *                     type="string",
+     * *                     format="binary",
+     * *                     description="Thumbnail of the category"
+     * *                 )
+     * *             )
+     * *         )
+     * *     ),
      *     @OA\Response(
      *         response=200,
      *         description="successful operation"

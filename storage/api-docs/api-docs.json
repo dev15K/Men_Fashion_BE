@@ -349,6 +349,24 @@
                 }
             }
         },
+        "/api/auth/users/get-info": {
+            "get": {
+                "tags": [
+                    "Users Api"
+                ],
+                "summary": "Get user information from token",
+                "description": "Get user information from token",
+                "operationId": "7eb8babad875923afee93985c319a622",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    }
+                }
+            }
+        },
         "/api/admin/attributes/list": {
             "get": {
                 "tags": [
@@ -658,7 +676,35 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "multipart/form-data": {}
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the category",
+                                        "type": "string"
+                                    },
+                                    "parent_id": {
+                                        "description": "Parent category ID",
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "description": "Status of the category",
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "thumbnail": {
+                                        "description": "Thumbnail of the category",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
                     }
                 },
                 "responses": {
@@ -1195,6 +1241,10 @@
         {
             "name": "Product",
             "description": "Product"
+        },
+        {
+            "name": "Users Api",
+            "description": "Users Api"
         },
         {
             "name": "Admin Attribute",
