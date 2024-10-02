@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\restapi;
 
 use App\Enums\UserStatus;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api;
 use App\Http\Controllers\MainController;
 use App\Models\Role;
 use App\Models\RoleUser;
@@ -13,10 +13,47 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use OpenApi\Annotations as OA;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class AuthApi extends Controller
+class AuthApi extends Api
 {
+    /**
+     * @OA\Post(
+     *     path="/auth/login",
+     *     summary="User login",
+     *     description="User login",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         description="User login info",
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"login_request", "password"},
+     *             @OA\Property(property="login_request", type="string", example="user@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="Passw0rd"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="full_name", type="string", example="Nguyen Van A"),
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+     *             @OA\Property(property="phone", type="string", example="123456789"),
+     *             @OA\Property(property="role", type="string", example="admin"),
+     *             @OA\Property(property="accessToken", type="string", example="abcxyz1234567890"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Th  t b i, Vui l ng ki m tra l i t i kho n ho c m t kh u!"),
+     *         ),
+     *     ),
+     * )
+     */
     public function login(Request $request)
     {
         $newController = (new MainController());
@@ -36,15 +73,18 @@ class AuthApi extends Controller
 
             $user = User::where('email', $loginRequest)->orWhere('phone', $loginRequest)->first();
             if (!$user) {
-                return response($newController->returnMessage('User not found!'), 404);
-            } else {
-                if ($user->status == UserStatus::INACTIVE) {
-                    return response($newController->returnMessage('User not active!'), 400);
-                } else if ($user->status == UserStatus::BLOCKED) {
-                    return response($newController->returnMessage('User has been blocked!'), 400);
-                } else if ($user->status == UserStatus::DELETED) {
-                    return response($newController->returnMessage('User is deleted!'), 400);
-                }
+                return response($newController->returnMessage('Không tìm thấy tài khoản!'), 404);
+            }
+            if ($user->status == UserStatus::INACTIVE) {
+                return response($newController->returnMessage('Tài khoản chưa được kích hoạt!'), 400);
+            }
+
+            if ($user->status == UserStatus::BLOCKED) {
+                return response($newController->returnMessage('Tài khoản đã bị khoá!'), 400);
+            }
+
+            if ($user->status == UserStatus::DELETED) {
+                return response($newController->returnMessage('Tài khoản đã bị xoá!'), 400);
             }
 
             if (Auth::attempt($credentials)) {
@@ -58,12 +98,89 @@ class AuthApi extends Controller
                 $response['accessToken'] = $token;
                 return response()->json($response);
             }
-            return response()->json($newController->returnMessage('Login fail! Please check email or password'), 400);
+            return response()->json($newController->returnMessage('Thất bại, Vui lòng kiểm tra lại tài khoản hoặc mật khẩu!'), 400);
         } catch (\Exception $exception) {
             return response($newController->returnMessage($exception->getMessage()), 400);
         }
     }
 
+    /**
+     * Register a new user.
+     *
+     * @OA\Post(
+     *     path="/auth/register",
+     *     summary="Register a new user",
+     *     description="Register a new user",
+     *     tags={"Auth"},
+     *     @OA\Parameter(
+     *         description="Name",
+     *         in="query",
+     *         name="name",
+     *         required=false,
+     *         example="Nguyen Van A",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         description="Email",
+     *         in="query",
+     *         name="email",
+     *         required=true,
+     *         example="user1@example.com",
+     *         @OA\Schema(
+     *             type="string",
+     *             format="email"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         description="Phone",
+     *         in="query",
+     *         name="phone",
+     *         required=true,
+     *         example="123456789",
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         description="Password",
+     *         in="query",
+     *         name="password",
+     *         required=true,
+     *         example="123456",
+     *         @OA\Schema(
+     *             type="string",
+     *             format="password"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         description="Password confirm",
+     *         in="query",
+     *         name="password_confirm",
+     *         required=true,
+     *         example="123456",
+     *         @OA\Schema(
+     *             type="string",
+     *             format="password"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Th  t b i, Vui l ng ki m tra l i t i kho n ho c m t kh u!"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Thành công, Vui lòng kiểm tra email!"),
+     *         ),
+     *     ),
+     * )
+     */
     public function register(Request $request)
     {
         $newController = (new MainController());
@@ -76,25 +193,25 @@ class AuthApi extends Controller
 
             $isEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
             if (!$isEmail) {
-                return response($newController->returnMessage('Email invalid!'), 400);
+                return response($newController->returnMessage('Email không hợp lệ!'), 400);
             }
 
             $is_valid = User::checkEmail($email);
             if (!$is_valid) {
-                return response($newController->returnMessage('Email already exited!'), 400);
+                return response($newController->returnMessage('Email đã được sử dụng!'), 400);
             }
 
             $is_valid = User::checkPhone($phone);
             if (!$is_valid) {
-                return response($newController->returnMessage('Phone already exited!'), 400);
+                return response($newController->returnMessage('Số điện thoại đã được sử dụng!'), 400);
             }
 
             if ($password != $password_confirm) {
-                return response($newController->returnMessage('Password or Password Confirm incorrect!'), 400);
+                return response($newController->returnMessage('Mật khẩu và mật khẩu xác nhận không chính xác!'), 400);
             }
 
             if (strlen($password) < 5) {
-                return response($newController->returnMessage('Password invalid!'), 400);
+                return response($newController->returnMessage('Mật khẩu không hợp lệ!'), 400);
             }
 
             $passwordHash = Hash::make($password);
@@ -116,19 +233,43 @@ class AuthApi extends Controller
             $newController->saveRoleUser($user->id);
 
             if ($success) {
-                return response($newController->returnMessage('Register success!'), 200);
+                return response($newController->returnMessage('Đăng ký thành công!'), 200);
             }
-            return response($newController->returnMessage('Register failed!'), 400);
+            return response($newController->returnMessage('Đăng ký thất bại!'), 400);
         } catch (\Exception $exception) {
             return response($newController->returnMessage($exception->getMessage()), 400);
         }
     }
 
+    /**
+     * Logs out the user from the system.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @OA\Get(
+     *     path="/auth/logout",
+     *     tags={"Auth"},
+     *     summary="Logs out the user from the system",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="access_token", type="string", example="abcxyz1234567890"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Đăng xuất thành công!"),
+     *         ),
+     *     ),
+     * )
+     */
     public function logout(Request $request)
     {
         $newController = (new MainController());
         try {
-            return response($newController->returnMessage('Logout success!'), 200);
+            return response($newController->returnMessage('Đăng xuất thành công!'), 200);
         } catch (\Exception $exception) {
             return response($newController->returnMessage($exception->getMessage()), 400);
         }

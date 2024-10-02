@@ -7,6 +7,5 @@ use BenSampo\Enum\Enum;
 final class RoleName extends Enum
 {
     const ADMIN = 'ADMIN';
-    const MODERATOR = 'MODERATOR';
     const USER = 'USER';
 }
