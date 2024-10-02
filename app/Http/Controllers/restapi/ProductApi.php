@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\restapi;
 
 use App\Enums\ProductStatus;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api;
 use App\Models\Products;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 
-class ProductApi extends Controller
+class ProductApi extends Api
 {
     /**
      * @OA\Get(
-     *     path="/api/products",
+     *     path="/api/products/list",
      *     summary="Get list of products",
      *     description="Get list of products",
      *     tags={"Product"},

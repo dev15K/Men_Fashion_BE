@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\restapi;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api;
 
-class CategoryApi extends Controller
+class CategoryApi extends Api
 {
     //
 }

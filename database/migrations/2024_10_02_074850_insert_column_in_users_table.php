@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             $table->longText('token')->nullable();
-            $table->longText('avt')->nullable()->default('image/avatar-default.svg');
+            $table->longText('avt')->nullable()->default('image/avatar-default.jpg');
         });
     }
 

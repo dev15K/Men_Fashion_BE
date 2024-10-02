@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\restapi\admin;
 
 use App\Enums\ProductStatus;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use OpenApi\Annotations as OA;
 
-class AdminProductApi extends Controller
+class AdminProductApi extends Api
 {
 
     /**
      * @OA\Get(
-     *     path="/api/admin/products",
-     *     tags={"Admin"},
+     *     path="/api/admin/products/list",
+     *     tags={"Admin Product"},
      *     summary="Get list of products",
      *     description="Get list of products",
      *     @OA\Response(
@@ -41,8 +42,8 @@ class AdminProductApi extends Controller
      * Get detail of a product
      *
      * @OA\Get(
-     *     path="/admin/products/{id}",
-     *     tags={"Admin"},
+     *     path="/api/admin/products/detail/{id}",
+     *     tags={"Admin Product"},
      *     summary="Get detail of a product",
      *     description="Get detail of a product",
      *     @OA\Parameter(
@@ -86,48 +87,95 @@ class AdminProductApi extends Controller
      * Create a product
      *
      * @OA\Post(
-     *     path="/admin/products/create",
-     *     tags={"Admin"},
+     *     path="/api/admin/products/create",
+     *     tags={"Admin Product"},
      *     summary="Create product",
-     *     description="Create product",
-     *     @OA\Parameter(
-     *         description="Name",
-     *         in="query",
-     *         name="name",
+     *     description="Create a new product",
+     *     @OA\RequestBody(
      *         required=true,
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         description="Category id",
-     *         in="query",
-     *         name="category_id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         description="Thumbnail",
-     *         in="query",
-     *         name="thumbnail",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="string"
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string",
+     *                     description="Name of the product",
+     *                     example="Sample Product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="short_description",
+     *                     type="string",
+     *                     description="Short description of the product",
+     *                     example="This is a short description."
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     type="string",
+     *                     description="Detailed description of the product",
+     *                     example="This is a detailed description of the product."
+     *                 ),
+     *                 @OA\Property(
+     *                     property="parent_id",
+     *                     type="integer",
+     *                     description="Category ID for the product",
+     *                     example=1
+     *                 ),
+     *                 @OA\Property(
+     *                     property="thumbnail",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="Thumbnail image of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="gallery",
+     *                     type="array",
+     *                     @OA\Items(
+     *                         type="string",
+     *                         format="binary"
+     *                     ),
+     *                     description="Gallery images of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="price",
+     *                     type="number",
+     *                     format="float",
+     *                     description="Price of the product",
+     *                     example=19.99
+     *                 ),
+     *                 @OA\Property(
+     *                     property="sale_price",
+     *                     type="number",
+     *                     format="float",
+     *                     description="Sale price of the product",
+     *                     example=14.99
+     *                 ),
+     *                 @OA\Property(
+     *                     property="quantity",
+     *                     type="integer",
+     *                     description="Quantity of the product",
+     *                     example=100
+     *                 ),
+     *                 @OA\Property(
+     *                     property="status",
+     *                     type="integer",
+     *                     enum={1, 2, 3},
+     *                     description="Status of the product (e.g., available, out of stock)",
+     *                     example=1
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="successful operation"
+     *         description="Product created successfully"
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Bad request"
+     *         description="Invalid input data"
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Unauthorized user"
+     *         description="Unauthorized"
      *     )
      * )
      */
@@ -169,18 +217,85 @@ class AdminProductApi extends Controller
      * Update a product
      *
      * @OA\Put(
-     *     path="/admin/products/{id}",
-     *     tags={"Admin"},
-     *     summary="Update a product",
-     *     description="Update a product",
+     *     path="/api/admin/products/update/{id}",
+     *     tags={"Admin Product"},
+     *     summary="Update product",
+     *     description="Update an existing product",
      *     @OA\Parameter(
-     *         description="Product ID",
-     *         in="path",
      *         name="id",
+     *         in="path",
      *         required=true,
+     *         description="Product ID",
      *         @OA\Schema(
      *             type="integer",
      *             format="int64"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string",
+     *                     description="Name of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="short_description",
+     *                     type="string",
+     *                     description="Short description of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     type="string",
+     *                     description="Detailed description of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="parent_id",
+     *                     type="integer",
+     *                     description="Category ID"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="thumbnail",
+     *                     type="file",
+     *                     format="binary",
+     *                     description="Thumbnail image of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="gallery",
+     *                     type="array",
+     *                     @OA\Items(
+     *                         type="string",
+     *                         multipleOf="10",
+     *                         format="binary"
+     *                     ),
+     *                     description="Gallery images of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="price",
+     *                     type="number",
+     *                     format="float",
+     *                     description="Price of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="sale_price",
+     *                     type="number",
+     *                     format="float",
+     *                     description="Sale price of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="quantity",
+     *                     type="integer",
+     *                     description="Quantity of the product"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="status",
+     *                     type="integer",
+     *                     enum={1, 2, 3},
+     *                     description="Status of the product (e.g., available, out of stock)"
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -188,8 +303,12 @@ class AdminProductApi extends Controller
      *         description="successful operation"
      *     ),
      *     @OA\Response(
-     *         response="401",
-     *         description="Unauthorized user"
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Product not found"
      *     )
      * )
      */
@@ -273,8 +392,8 @@ class AdminProductApi extends Controller
      * Delete a product
      *
      * @OA\Delete(
-     *     path="/admin/products/{id}",
-     *     tags={"Admin"},
+     *     path="/api/admin/products/delete/{id}",
+     *     tags={"Admin Product"},
      *     summary="Delete a product",
      *     description="Delete a product",
      *     @OA\Parameter(

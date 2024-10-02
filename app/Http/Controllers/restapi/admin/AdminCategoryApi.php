@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\restapi\admin;
 
 use App\Enums\CategoryStatus;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api;
 use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use OpenApi\Annotations as OA;
 
-class AdminCategoryApi extends Controller
+class AdminCategoryApi extends Api
 {
     /**
      * @OA\Get(
-     *     path="/api/admin/categories",
-     *     tags={"Admin"},
+     *     path="/api/admin/categories/list",
+     *     tags={"Admin Category"},
      *     summary="Get list of categories",
      *     description="Get list of categories",
      *     @OA\Response(
@@ -40,8 +41,8 @@ class AdminCategoryApi extends Controller
      * Get detail of a category
      *
      * @OA\Get(
-     *     path="/api/admin/categories/{id}",
-     *     tags={"Admin"},
+     *     path="/api/admin/categories/detail/{id}",
+     *     tags={"Admin Category"},
      *     summary="Get detail of a category",
      *     description="Get detail of a category",
      *     @OA\Parameter(
@@ -84,45 +85,38 @@ class AdminCategoryApi extends Controller
      * Create a category
      *
      * @OA\Post(
-     *     path="/admin/categories/create",
-     *     tags={"Admin"},
+     *     path="/api/admin/categories/create",
+     *     tags={"Admin Category"},
      *     summary="Create category",
      *     description="Create category",
-     *     @OA\Parameter(
-     *         description="Name",
-     *         in="query",
-     *         name="name",
+     *     @OA\RequestBody(
      *         required=true,
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         description="Parent id",
-     *         in="query",
-     *         name="parent_id",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         description="Status",
-     *         in="query",
-     *         name="status",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer",
-     *             enum={1,2,3}
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         description="Thumbnail",
-     *         in="query",
-     *         name="thumbnail",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="string"
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string",
+     *                     description="Name of the category"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="parent_id",
+     *                     type="integer",
+     *                     description="Parent category ID"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="status",
+     *                     type="integer",
+     *                     enum={1, 2, 3},
+     *                     description="Status of the category"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="thumbnail",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="Thumbnail of the category"
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -132,7 +126,7 @@ class AdminCategoryApi extends Controller
      *     @OA\Response(
      *         response="401",
      *         description="Unauthorized user"
-     *     ),
+     *     )
      * )
      */
     public function create(Request $request)
@@ -180,12 +174,13 @@ class AdminCategoryApi extends Controller
         }
     }
 
+
     /**
      * @OA\Put(
-     *     path="/api/admin/categories/{id}",
-     *     tags={"Admin"},
-     *     summary="Update category",
-     *     description="Update category",
+     *     path="/api/admin/categories/update/{id}",
+     *     summary="Update a category",
+     *     description="Update a category",
+     *     tags={"Admin Category"},
      *     @OA\Parameter(
      *         description="Category ID",
      *         in="path",
@@ -197,13 +192,13 @@ class AdminCategoryApi extends Controller
      *         )
      *     ),
      *     @OA\RequestBody(
-     *         description="Input data format",
-     *         @OA\JsonContent(
-     *             type="object",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
      *             @OA\Property(
      *                 property="name",
      *                 type="string",
-     *                 description="Category name"
+     *                 description="Name of the category"
      *             ),
      *             @OA\Property(
      *                 property="parent_id",
@@ -214,12 +209,12 @@ class AdminCategoryApi extends Controller
      *                 property="thumbnail",
      *                 type="string",
      *                 format="binary",
-     *                 description="Thumbnail"
+     *                 description="Thumbnail of the category"
      *             ),
      *             @OA\Property(
      *                 property="status",
      *                 type="integer",
-     *                 description="Category status"
+     *                 description="Status of the category"
      *             )
      *         )
      *     ),
@@ -228,9 +223,13 @@ class AdminCategoryApi extends Controller
      *         description="successful operation"
      *     ),
      *     @OA\Response(
-     *         response="401",
+     *         response=401,
      *         description="Unauthorized user"
      *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Category not found"
+     *     )
      * )
      */
     public function update(Request $request, $id)
@@ -280,7 +279,7 @@ class AdminCategoryApi extends Controller
      *
      * @OA\Delete(
      *     path="/admin/categories/{id}",
-     *     tags={"Admin"},
+     *     tags={"Admin Category"},
      *     summary="Delete a category",
      *     description="Delete a category",
      *     @OA\Parameter(
