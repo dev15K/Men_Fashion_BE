@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('attribute_id');
             $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade');
 
-            $table->string('status')->default(\App\Enums\PropertiStatus::ACTIVE);
+            $table->string('status')->default(\App\Enums\PropertyStatus::ACTIVE);
 
             $table->timestamps();
         });

@@ -3,17 +3,17 @@
 if (!function_exists('returnMessage')) {
     function returnMessage($type, $data, $message)
     {
-        if ($type == -1) {
+        if ($type === 1) {
             $data = [
-                'type' => 'error',
-                'status' => 'error',
+                'type' => 'success',
+                'status' => 'success',
                 'message' => $message,
                 'data' => $data,
             ];
         } else {
             $data = [
-                'type' => 'success',
-                'status' => 'success',
+                'type' => 'error',
+                'status' => 'error',
                 'message' => $message,
                 'data' => $data,
             ];

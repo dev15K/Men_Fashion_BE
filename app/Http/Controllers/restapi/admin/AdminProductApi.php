@@ -4,6 +4,7 @@ namespace App\Http\Controllers\restapi\admin;
 
 use App\Enums\ProductStatus;
 use App\Http\Controllers\Api;
+use App\Models\ProductOptions;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -70,7 +71,6 @@ class AdminProductApi extends Api
      *     )
      * )
      */
-
     public function detail(Request $request, $id)
     {
         $product = Products::find($id);
@@ -267,7 +267,6 @@ class AdminProductApi extends Api
      *                     type="array",
      *                     @OA\Items(
      *                         type="string",
-     *                         multipleOf="10",
      *                         format="binary"
      *                     ),
      *                     description="Gallery images of the product"
@@ -438,5 +437,42 @@ class AdminProductApi extends Api
             $data = returnMessage(-1, $product, $exception->getMessage());
             return response()->json($data, 400);
         }
+    }
+
+    private function getArray($array)
+    {
+        if ($array) {
+            if (count($array) == 1) {
+                return $array;
+            }
+            $newArray = $array[0];
+            for ($i = 1; $i < count($array); $i++) {
+                $newArray = $this->mergeArray($newArray, $array[$i]);
+            }
+            return $newArray;
+        } else {
+            return null;
+        }
+    }
+
+    private function mergeArray($array1, $array2)
+    {
+        $arrayList = [];
+        for ($j = 0; $j < count($array1); $j++) {
+            for ($z = 0; $z < count($array2); $z++) {
+                $arrayList[] = $array1[$j] . "," . $array2[$z];
+            }
+        }
+        return $arrayList;
+    }
+
+    public function getDataToModalAtt($productID)
+    {
+
+    }
+
+    private function saveData()
+    {
+
     }
 }
