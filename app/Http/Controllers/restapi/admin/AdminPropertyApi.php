@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\restapi\admin;
 
+use App\Enums\AttributeStatus;
 use App\Enums\PropertyStatus;
 use App\Http\Controllers\Api;
 use App\Models\Properties;
@@ -28,8 +29,11 @@ class AdminPropertyApi extends Api
      */
     public function list(Request $request)
     {
-        $properties = Properties::where('status', '!=', PropertyStatus::DELETED)
-            ->orderBy('id', 'desc')
+        $properties = Properties::where('properties.status', '!=', PropertyStatus::DELETED)
+            ->orderBy('properties.id', 'desc')
+            ->join('attributes', 'properties.attribute_id', '=', 'attributes.id')
+            ->where('attributes.status', '!=', AttributeStatus::DELETED)
+            ->select('properties.*', 'attributes.name as attribute_name')
             ->get();
         $data = returnMessage(1, $properties, 'Success!');
         return response()->json($data, 200);
@@ -251,9 +255,6 @@ class AdminPropertyApi extends Api
                 $itemPath = $item->store('property', 'public');
                 $thumbnail = asset('storage/' . $itemPath);
                 $property->thumbnail = $thumbnail;
-            } else {
-                $data = returnMessage(-1, null, 'Error, Please upload thumbnail!');
-                return response()->json($data, 400);
             }
 
             $success = $property->save();
