@@ -4,7 +4,6 @@ namespace App\Http\Controllers\restapi;
 
 use App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
-use OpenApi\Annotations as OA;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;

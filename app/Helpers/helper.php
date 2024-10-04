@@ -1,7 +1,13 @@
 <?php
 
 if (!function_exists('returnMessage')) {
-    function returnMessage($type, $data, $message)
+    /**
+     * @param int $type
+     * @param mixed $data
+     * @param string $message
+     * @return array
+     */
+    function returnMessage(int $type, mixed $data, string $message): array
     {
         if ($type === 1) {
             $data = [
