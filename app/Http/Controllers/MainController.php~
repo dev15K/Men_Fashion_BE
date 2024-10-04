@@ -31,7 +31,7 @@ class MainController extends Controller
      * @param int $user_id The ID of the user
      * @return bool True if the user has any of the roles, false otherwise
      */
-    private function checkRoles($roleNames, $user_id = null)
+    private function checkRoles($roleNames, $user_id)
     {
         $hasRole = false;
         if (Auth::check()) {
