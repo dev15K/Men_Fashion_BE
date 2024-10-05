@@ -349,6 +349,71 @@
                 }
             }
         },
+        "/api/properties/list": {
+            "get": {
+                "tags": [
+                    "Property"
+                ],
+                "summary": "Get list of properties",
+                "description": "Get list of properties",
+                "operationId": "7955123ac6eabfa7258605f5e798dab6",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Name of the property",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "attribute_id",
+                        "in": "query",
+                        "description": "Attribute ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/api/properties/detail/{id}": {
+            "get": {
+                "tags": [
+                    "Property"
+                ],
+                "summary": "Get detail of a property",
+                "description": "Get detail of a property",
+                "operationId": "6facbe004f716f0dafbae0587a27c159",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Property ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "404": {
+                        "description": "Property not found"
+                    }
+                }
+            }
+        },
         "/api/auth/users/get-info": {
             "get": {
                 "tags": [
@@ -874,6 +939,48 @@
                                             3
                                         ],
                                         "example": 1
+                                    },
+                                    "data_options": {
+                                        "description": "The options of the product",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "quantity": {
+                                                    "description": "The quantity of the option",
+                                                    "type": "integer"
+                                                },
+                                                "price": {
+                                                    "description": "The price of the option",
+                                                    "type": "number",
+                                                    "format": "float"
+                                                },
+                                                "sale_price": {
+                                                    "description": "The sale price of the option",
+                                                    "type": "number",
+                                                    "format": "float"
+                                                },
+                                                "description": {
+                                                    "description": "The description of the option",
+                                                    "type": "string"
+                                                },
+                                                "data_images": {
+                                                    "description": "The images of the option",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "format": "binary"
+                                                    }
+                                                },
+                                                "_options": {
+                                                    "description": "The values of the option",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -1241,6 +1348,10 @@
         {
             "name": "Product",
             "description": "Product"
+        },
+        {
+            "name": "Property",
+            "description": "Property"
         },
         {
             "name": "Users Api",

@@ -84,149 +84,86 @@ class AdminProductApi extends Api
         return response()->json($data, 200);
     }
 
+<<<<<<<<<<<<<<  ✨ Codeium Command ⭐ >>>>>>>>>>>>>>>>
     /**
      * Create a product
      *
      * @OA\Post(
      *     path="/api/admin/products/create",
      *     tags={"Admin Product"},
-     *     summary="Create product",
-     *     description="Create a new product",
+     *     summary="Create a product",
+     *     description="Create a product",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/json",
      *             @OA\Schema(
+     *                 type="object",
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
-     *                     description="Name of the product",
-     *                     example="Sample Product"
+     *                     description="The name of the product",
      *                 ),
      *                 @OA\Property(
-     *                     property="short_description",
-     *                     type="string",
-     *                     description="Short description of the product",
-     *                     example="This is a short description."
-     *                 ),
-     *                 @OA\Property(
-     *                     property="description",
-     *                     type="string",
-     *                     description="Detailed description of the product",
-     *                     example="This is a detailed description of the product."
-     *                 ),
-     *                 @OA\Property(
-     *                     property="parent_id",
+     *                     property="category_id",
      *                     type="integer",
-     *                     description="Category ID for the product",
-     *                     example=1
+     *                     description="The category ID of the product",
      *                 ),
      *                 @OA\Property(
      *                     property="thumbnail",
      *                     type="string",
-     *                     format="binary",
-     *                     description="Thumbnail image of the product"
+     *                     description="The thumbnail image of the product",
+     *                     format="binary"
      *                 ),
      *                 @OA\Property(
-     *                     property="gallery",
+     *                     property="data_options",
      *                     type="array",
+     *                     description="The options of the product",
      *                     @OA\Items(
-     *                         type="string",
-     *                         format="binary"
-     *                     ),
-     *                     description="Gallery images of the product"
+     *                         type="object",
+     *                         @OA\Property(
+     *                             property="quantity",
+     *                             type="integer",
+     *                             description="The quantity of the option",
+     *                         ),
+     *                         @OA\Property(
+     *                             property="price",
+     *                             type="number",
+     *                             description="The price of the option",
+     *                             format="float"
+     *                         ),
+     *                         @OA\Property(
+     *                             property="sale_price",
+     *                             type="number",
+     *                             description="The sale price of the option",
+     *                             format="float"
+     *                         ),
+     *                         @OA\Property(
+     *                             property="description",
+     *                             type="string",
+     *                             description="The description of the option",
+     *                         ),
+     *                         @OA\Property(
+     *                             property="data_images",
+     *                             type="array",
+     *                             description="The images of the option",
+     *                             @OA\Items(
+     *                                 type="string",
+     *                                 format="binary"
+     *                             )
+     *                         ),
+     *                         @OA\Property(
+     *                             property="_options",
+     *                             type="array",
+     *                             description="The values of the option",
+     *                             @OA\Items(
+     *                                 type="string"
+     *                             )
+     *                         ),
+     *                     )
      *                 ),
-     *                 @OA\Property(
-     *                     property="price",
-     *                     type="number",
-     *                     format="float",
-     *                     description="Price of the product",
-     *                     example=19.99
-     *                 ),
-     *                 @OA\Property(
-     *                     property="sale_price",
-     *                     type="number",
-     *                     format="float",
-     *                     description="Sale price of the product",
-     *                     example=14.99
-     *                 ),
-     *                 @OA\Property(
-     *                     property="quantity",
-     *                     type="integer",
-     *                     description="Quantity of the product",
-     *                     example=100
-     *                 ),
-     *                 @OA\Property(
-     *                     property="status",
-     *                     type="integer",
-     *                     enum={1, 2, 3},
-     *                     description="Status of the product (e.g., available, out of stock)",
-     *                     example=1
-     *                 ),
-     *                  @OA\Property(
-     *                      property="data_options",
-     *                      type="array",
-     *                      description="The options of the product",
-     *                      @OA\Items(
-     *                          type="object",
-     *                          @OA\Property(
-     *                              property="quantity",
-     *                              type="integer",
-     *                              description="The quantity of the option",
-     *                          ),
-     *                          @OA\Property(
-     *                              property="price",
-     *                              type="number",
-     *                              description="The price of the option",
-     *                              format="float"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="sale_price",
-     *                              type="number",
-     *                              description="The sale price of the option",
-     *                              format="float"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="description",
-     *                              type="string",
-     *                              description="The description of the option",
-     *                          ),
-     *                          @OA\Property(
-     *                              property="data_images",
-     *                              type="array",
-     *                              description="The images of the option",
-     *                              @OA\Items(
-     *                                  type="string",
-     *                                  format="binary"
-     *                              )
-     *                          ),
-     *                          @OA\Property(
-     *                              property="_options",
-     *                              type="array",
-     *                              description="The values of the option",
-     *                              @OA\Items(
-     *                                  type="string"
-     *                              )
-     *                          ),
-     *                      )
-     *                  ),
      *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Product created successfully"
-     *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Invalid input data"
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized"
-     *     )
-     * )
-     */
+<<<<<<<  fd48ddd0-4a47-407c-815b-f8fe78343d7b  >>>>>>>
     public function create(Request $request)
     {
         try {
