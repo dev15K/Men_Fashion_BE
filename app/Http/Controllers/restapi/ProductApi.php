@@ -26,12 +26,40 @@ class ProductApi extends Api
      *     )
      * )
      */
-    public function list()
+    public function list(Request $request)
     {
-        $products = Products::where('status', ProductStatus::ACTIVE)
-            ->orderByDesc('id')
-            ->get();
+        $category_id = $request->input('category_id');
+        $size = $request->input('size');
+        $sort = $request->input('sort');
+        $keyword = $request->input('keyword');
+        $order_by = $request->input('order');
 
+        $products = Products::where('status', ProductStatus::ACTIVE);
+
+        if ($category_id) {
+            $products->where('category_id', $category_id);
+        }
+
+        if ($size) {
+            $size = (int)$size;
+            $products->limit($size);
+        }
+
+        if ($keyword) {
+            $products->where('name', 'like', '%' . $keyword . '%');
+        }
+
+        if (isset($sort) && isset($order_by) && $sort == 'asc') {
+            $products = $products->orderBy($order_by, $sort);
+        } elseif (isset($sort) && !isset($order_by) && $sort == 'asc') {
+            $products = $products->orderBy('id', $sort);
+        } elseif (isset($order_by)) {
+            $products = $products->orderBy($order_by, 'desc');
+        } else {
+            $products = $products->orderBy('id', 'desc');
+        }
+
+        $products = $products->get();
         $data = returnMessage(1, $products, 'Success!');
         return response()->json($data, 200);
     }
