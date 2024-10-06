@@ -4,8 +4,10 @@ namespace App\Http\Controllers\restapi\admin;
 
 use App\Enums\ProductStatus;
 use App\Http\Controllers\Api;
+use App\Models\Attributes;
 use App\Models\ProductOptions;
 use App\Models\Products;
+use App\Models\Properties;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -80,6 +82,34 @@ class AdminProductApi extends Api
             return response()->json($data, 404);
         }
 
+        $product = $product->toArray();
+
+        $product_option = ProductOptions::where('product_id', $id)
+            ->cursor()
+            ->map(function ($item) {
+                $option_item = $item->toArray();
+
+                $options = $item->value;
+                $options = json_decode($options, true);
+
+                $data = [];
+                foreach ($options as $key => $option) {
+                    $ite = [];
+
+                    $attribute = Attributes::find($option['attribute_item']);
+                    $property = Properties::find($option['property_item']);
+
+                    $ite['attribute_item'] = $attribute;
+                    $ite['property_item'] = $property;
+
+                    $data[] = $ite;
+                }
+
+                $option_item['options'] = $data;
+                return $option_item;
+            });
+
+        $product['options'] = $product_option;
         $data = returnMessage(1, $product, 'Success!');
         return response()->json($data, 200);
     }
@@ -406,11 +436,58 @@ class AdminProductApi extends Api
     public function update(Request $request, $id)
     {
         try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $user = $user->toArray();
+            $user_id = $user['id'];
+
             $product = Products::find($id);
 
             $product = $this->save($product, $request);
 
             $success = $product->save();
+
+
+            $product_option = ProductOptions::where('product_id', $product->id)->delete();
+
+            $data_options = $request->input('data_options');
+
+            $data_options = json_decode($data_options, true);
+
+            $index = 0;
+            foreach ($data_options as $data_option) {
+                $product_option = new ProductOptions();
+
+                $product_id = $product->id;
+
+                $quantity = $data_option['quantity'];
+                $price = $data_option['price'];
+                $sale_price = $data_option['sale_price'];
+                $description = $data_option['description'];
+                $thumbnail_uploaded = isset($data_option['thumbnail_uploaded']) ? $data_option['thumbnail_uploaded'] : '';
+
+                $thumbnail = $thumbnail_uploaded;
+
+                if ($request->hasFile('data_images')) {
+                    $data_images = $request->file('data_images');
+                    $image = $data_images[$index];
+                    $itemPath = $image->store('product', 'public');
+                    $thumbnail = asset('storage/' . $itemPath);
+                }
+
+                $product_option->product_id = $product_id;
+                $product_option->user_id = $user_id;
+                $product_option->quantity = $quantity;
+                $product_option->price = $price;
+                $product_option->sale_price = $sale_price;
+                $product_option->description = $description;
+                $product_option->thumbnail = $thumbnail;
+
+                $data_values = json_encode($data_option['_options'], JSON_THROW_ON_ERROR);
+                $product_option->value = $data_values;
+
+                $product_option->save();
+                $index++;
+            }
 
             if ($success) {
                 $data = returnMessage(1, $product, 'Success, Update product successful!');

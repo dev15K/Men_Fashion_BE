@@ -11,8 +11,13 @@
 |
 */
 
+use App\Http\Controllers\restapi\CategoryApi;
 use App\Http\Controllers\restapi\ProductApi;
 use App\Http\Controllers\restapi\PropertyApi;
+
+Route::group(['prefix' => 'categories'], function () {
+    Route::get('list', [CategoryApi::class, 'list'])->name('api.restapi.categories.list');
+});
 
 Route::group(['prefix' => 'products'], function () {
     Route::get('list', [ProductApi::class, 'list'])->name('api.restapi.products.list');
