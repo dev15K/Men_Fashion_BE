@@ -137,13 +137,60 @@ class ProductApi extends Api
         return response()->json($res, 200);
     }
 
-    /**
-     * Merge an array of option values into a grouped array
-     *
-     * @param array $array_value an array of option values
-     *
-     * @return array a grouped array of options
-     */
+    private function returnOption()
+    {
+        $data = [
+            [
+                "attribute_item" => "1",
+                "property_item" => "7"
+            ],
+            [
+                "attribute_item" => "2",
+                "property_item" => "5"
+            ],
+            [
+                "attribute_item" => "1",
+                "property_item" => "4"
+            ],
+            [
+                "attribute_item" => "2",
+                "property_item" => "6"
+            ],
+            [
+                "attribute_item" => "2",
+                "property_item" => "2"
+            ],
+            [
+                "attribute_item" => "3",
+                "property_item" => "9"
+            ]
+        ];
+
+        $re = [
+            [
+                "attribute_item" => "1",
+                "property_item" => [
+                    "4",
+                    "7",
+                ]
+            ],
+            [
+                "attribute_item" => "2",
+                "property_item" => [
+                    "2",
+                    "5",
+                    "6",
+                ]
+            ],
+            [
+                "attribute_item" => "3",
+                "property_item" => [
+                    "9",
+                ]
+            ],
+        ];
+    }
+
     private function mergeOption($array_value)
     {
         $n = count($array_value);
@@ -187,7 +234,7 @@ class ProductApi extends Api
         foreach ($result as $group) {
             sort($group['properties']);
         }
-
+        
         $result = array_values($result);
         return $result;
     }
