@@ -257,14 +257,14 @@
                 }
             }
         },
-        "/api/products/{id}": {
+        "/api/products/detail/{id}": {
             "get": {
                 "tags": [
                     "Product"
                 ],
                 "summary": "Get detail of a product",
                 "description": "Get detail of a product",
-                "operationId": "ad33bef7d33e6333866e7d4eedc1dc70",
+                "operationId": "60a0239fa43acb702fd8e767cb8e4683",
                 "parameters": [
                     {
                         "name": "id",

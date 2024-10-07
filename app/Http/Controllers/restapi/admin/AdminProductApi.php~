@@ -459,21 +459,19 @@ class AdminProductApi extends Api
 
                 $product_id = $product->id;
 
-                $quantity = $data_option['quantity'] ?? '';
-                $price = $data_option['price'] ?? '';
-                $sale_price = $data_option['sale_price'] ?? '';
-                $description = $data_option['description'] ?? '';
+                $quantity = $data_option['quantity'];
+                $price = $data_option['price'];
+                $sale_price = $data_option['sale_price'];
+                $description = $data_option['description'];
                 $thumbnail_uploaded = isset($data_option['thumbnail_uploaded']) ? $data_option['thumbnail_uploaded'] : '';
 
                 $thumbnail = $thumbnail_uploaded;
 
                 if ($request->hasFile('data_images')) {
                     $data_images = $request->file('data_images');
-                    $image = isset($data_images[$index]) ? $data_images[$index] : null;
-                    if ($image != null) {
-                        $itemPath = $image->store('product', 'public');
-                        $thumbnail = asset('storage/' . $itemPath);
-                    }
+                    $image = $data_images[$index];
+                    $itemPath = $image->store('product', 'public');
+                    $thumbnail = asset('storage/' . $itemPath);
                 }
 
                 $product_option->product_id = $product_id;
