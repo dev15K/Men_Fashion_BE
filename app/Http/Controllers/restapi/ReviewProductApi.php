@@ -28,9 +28,16 @@ class ReviewProductApi extends Api
      *     )
      * )
      */
-    public function list()
+    public function list(Request $request)
     {
-        $reviews = Reviews::where('status', ReviewStatus::APPROVED)->orderBy('id', 'desc')->get();
+        $product_id = $request->input('product_id');
+        $reviews = Reviews::where('status', ReviewStatus::APPROVED);
+
+        if ($product_id) {
+            $reviews->where('product_id', $product_id);
+        }
+
+        $reviews = $reviews->orderBy('id', 'desc')->get();
 
         $data = returnMessage(1, $reviews, 'Success!');
         return response()->json($data, 200);

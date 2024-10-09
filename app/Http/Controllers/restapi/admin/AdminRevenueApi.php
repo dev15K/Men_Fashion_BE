@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\restapi;
+namespace App\Http\Controllers\restapi\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Revenues;
 use OpenApi\Annotations as OA;
 
-class RevenueApi extends Controller
+class AdminRevenueApi extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/revenues/list",
+     *     path="/api/admin/revenues/list",
      *     summary="Get list of revenues",
      *     description="Get list of revenues",
      *     tags={"Revenue"},

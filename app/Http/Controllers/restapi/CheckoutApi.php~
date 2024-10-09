@@ -19,11 +19,6 @@ class CheckoutApi extends Api
 {
     protected $user;
 
-    /**
-     * Instantiate a new CheckoutController instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->user = JWTAuth::parseToken()->authenticate()->toArray();
@@ -61,13 +56,6 @@ class CheckoutApi extends Api
     public function checkout(Request $request)
     {
         try {
-            $user_id = $this->user['id'];
-            $carts = Carts::where('user_id', $user_id)->get();
-
-            if ($carts->count() == 0) {
-                $data = returnMessage(-1, 'Your cart is empty!', 'Your cart is empty!');
-                return response()->json($data, 400);
-            }
             $order_created = $this->handleCheckout($request);
             if ($order_created) {
                 $user_id = $this->user['id'];
@@ -117,13 +105,6 @@ class CheckoutApi extends Api
     public function returnCheckout(Request $request)
     {
         try {
-            $user_id = $this->user['id'];
-            $carts = Carts::where('user_id', $user_id)->get();
-            if ($carts->count() == 0) {
-                $data = returnMessage(-1, 'Your cart is empty!', 'Your cart is empty!');
-                return response()->json($data, 400);
-            }
-
             $url = session('url_prev', '/');
 
             if ($request->vnp_ResponseCode == "00") {
@@ -257,13 +238,6 @@ class CheckoutApi extends Api
      */
     public function checkoutByVNPay(Request $request)
     {
-        $user_id = $this->user['id'];
-        $carts = Carts::where('user_id', $user_id)->get();
-        if ($carts->count() == 0) {
-            $data = returnMessage(-1, 'Your cart is empty!', 'Your cart is empty!');
-            return response()->json($data, 400);
-        }
-
         $emailTo = $request->input('email');
         $money = $request->input('c_total');
         $token = $request->input('_token');

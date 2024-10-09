@@ -13,11 +13,8 @@
 
 use App\Http\Controllers\restapi\admin\AdminAttributeApi;
 use App\Http\Controllers\restapi\admin\AdminCategoryApi;
-use App\Http\Controllers\restapi\admin\AdminOrderApi;
 use App\Http\Controllers\restapi\admin\AdminProductApi;
 use App\Http\Controllers\restapi\admin\AdminPropertyApi;
-use App\Http\Controllers\restapi\admin\AdminRevenueApi;
-use App\Http\Controllers\restapi\admin\AdminReviewProductApi;
 
 Route::group(['prefix' => 'categories'], function () {
     Route::get('list', [AdminCategoryApi::class, 'list'])->name('api.admin.categories.list');
@@ -49,21 +46,4 @@ Route::group(['prefix' => 'products'], function () {
     Route::post('create', [AdminProductApi::class, 'create'])->name('api.admin.products.create');
     Route::post('update/{id}', [AdminProductApi::class, 'update'])->name('api.admin.products.update');
     Route::delete('delete/{id}', [AdminProductApi::class, 'delete'])->name('api.admin.products.delete');
-});
-
-Route::group(['prefix' => 'orders'], function () {
-    Route::get('list', [AdminOrderApi::class, 'list'])->name('api.admin.orders.list');
-    Route::get('detail/{id}', [AdminOrderApi::class, 'detail'])->name('api.admin.orders.detail');
-    Route::put('update/{id}', [AdminOrderApi::class, 'update'])->name('api.admin.orders.update');
-});
-
-Route::group(['prefix' => 'reviews'], function () {
-    Route::get('list', [AdminReviewProductApi::class, 'list'])->name('api.admin.reviews.list');
-    Route::get('detail/{id}', [AdminReviewProductApi::class, 'detail'])->name('api.admin.reviews.detail');
-    Route::put('update/{id}', [AdminReviewProductApi::class, 'update'])->name('api.admin.reviews.update');
-    Route::delete('delete/{id}', [AdminReviewProductApi::class, 'delete'])->name('api.admin.reviews.delete');
-});
-
-Route::group(['prefix' => 'revenues'], function () {
-    Route::get('list', [AdminRevenueApi::class, 'list'])->name('api.admin.revenues.list');
 });

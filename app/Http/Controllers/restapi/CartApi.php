@@ -19,7 +19,7 @@ class CartApi extends Api
      * Get list cart
      *
      * @OA\Get(
-     *     path="/carts",
+     *     path="/api/carts/list",
      *     summary="Get list cart",
      *     tags={"Cart"},
      *     @OA\Response(response=401, description="Unauthorized"),
