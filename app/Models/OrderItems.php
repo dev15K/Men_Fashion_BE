@@ -5,9 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductOptions extends Model
+class OrderItems extends Model
 {
     use HasFactory;
+
+    /**
+     * The order that this order item belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function order()
+    {
+        return $this->belongsTo(Orders::class);
+    }
 
     /**
      * The product that this order item is of.
