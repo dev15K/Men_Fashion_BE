@@ -65,21 +65,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    /**
-     * Many-to-Many relationship with Role model.
-     * A user has multiple roles and a role has multiple users.
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_users', 'user_id', 'role_id');
     }
 
-    /**
-     * Check if email is valid or not
-     * @param string $email
-     * @return bool
-     */
     public static function checkEmail($email)
     {
         $is_valid = true;
@@ -90,11 +80,6 @@ class User extends Authenticatable implements JWTSubject
         return $is_valid;
     }
 
-    /**
-     * Check if phone number is valid or not
-     * @param string $phone
-     * @return bool
-     */
     public static function checkPhone($phone)
     {
         $is_valid = true;

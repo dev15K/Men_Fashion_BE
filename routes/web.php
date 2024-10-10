@@ -22,6 +22,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [AuthApi::class, 'login'])->name('auth.login');
     Route::post('/register', [AuthApi::class, 'register'])->name('auth.register');
     Route::get('/logout', [AuthApi::class, 'logout'])->name('auth.logout');
+    Route::post('/forgot_password', [AuthApi::class, 'forgotPassword'])->name('auth.forgot.password');
+    Route::post('/change_password', [AuthApi::class, 'changePassword'])->name('auth.change.password');
 });
 
 /* Restapi api */

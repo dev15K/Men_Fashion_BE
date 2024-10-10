@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Categories extends Model
+class Orders extends Model
 {
     use HasFactory;
 
     /**
-     * Get the products for this category
+     * Get the order items for this order.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function products()
+    public function order_items()
     {
-        return $this->hasMany(Products::class);
+        return $this->hasMany(OrderItems::class);
     }
 }
