@@ -8,6 +8,7 @@ use App\Http\Controllers\MainController;
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -242,36 +243,146 @@ class AuthApi extends Api
     }
 
     /**
-     * Logs out the user from the system.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @OA\Get(
-     *     path="/auth/logout",
+     * @OA\Post(
+     *     path="/auth/forgot_password",
+     *     summary="Forgot password",
+     *     description="Forgot password",
      *     tags={"Auth"},
-     *     summary="Logs out the user from the system",
      *     @OA\RequestBody(
+     *         description="User info",
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="access_token", type="string", example="abcxyz1234567890"),
-     *         ),
+     *             type="object",
+     *             @OA\Property(property="email", type="string", example="user@example.com")
+     *         )
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Success",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Đăng xuất thành công!"),
-     *         ),
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="message", type="string", example="Success")
+     *         )
      *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=-1),
+     *             @OA\Property(property="message", type="string", example="User not found!")
+     *         )
+     *     )
      * )
      */
-    public function logout(Request $request)
+    public function forgotPassword(Request $request)
     {
-        $newController = (new MainController());
         try {
-            return response($newController->returnMessage('Đăng xuất thành công!'), 200);
+            $email = $request->input('email');
+
+            $code = (new MainController())->generateRandomNumber(6);
+
+            $user = User::where('email', $email)->first();
+
+            if (!$user) {
+                $data = returnMessage(-1, '', 'User not found!');
+                return response($data, 400);
+            }
+
+            $user->verify_code = $code;
+            $user->verify_code_expire = Carbon::now()->addMinutes(5);
+            $user->is_verify = false;
+
+            $user->save();
+            $data = returnMessage(1, '', 'Success');
+            return response($data, 200);
         } catch (\Exception $exception) {
-            return response($newController->returnMessage($exception->getMessage()), 400);
+            $data = returnMessage(-1, '', $exception->getMessage());
+            return response($data, 400);
+        }
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/auth/change_password",
+     *     summary="Update password",
+     *     description="Update password",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User info",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="email", type="string", example="nguyenvana@gmail.com"),
+     *             @OA\Property(property="code", type="string", example="123456"),
+     *             @OA\Property(property="password", type="string", example="123456"),
+     *             @OA\Property(property="password_confirm", type="string", example="123456")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request"
+     *     )
+     * )
+     */
+    public function changePassword(Request $request)
+    {
+        try {
+            $email = $request->input('email');
+            $code = $request->input('code');
+            $password = $request->input('password');
+            $password_confirm = $request->input('password_confirm');
+
+            $user = User::where('email', $email)->first();
+
+            if (!$user) {
+                $data = returnMessage(-1, '', 'User not found!');
+                return response($data, 400);
+            }
+
+            if ($code != $user->verify_code) {
+                $data = returnMessage(-1, '', 'Code not match!');
+                return response($data, 400);
+            }
+
+            if ($password != $password_confirm) {
+                $data = returnMessage(-1, '', 'Password not match!');
+                return response($data, 400);
+            }
+
+            if (strlen($password) < 5) {
+                $data = returnMessage(-1, '', 'Password must be at least 5 characters!');
+                return response($data, 400);
+            }
+
+            $passwordHash = Hash::make($password);
+            $user->password = $passwordHash;
+
+            $user->verify_code = null;
+            $user->verify_code_expire = null;
+            $user->is_verify = true;
+
+            $user->save();
+
+            $data = returnMessage(1, '', 'Success');
+            return response($data, 200);
+        } catch (\Exception $exception) {
+            $data = returnMessage(-1, '', $exception->getMessage());
+            return response($data, 400);
+        }
+    }
+
+    public function logout()
+    {
+        try {
+            $data = returnMessage(1, '', 'Success');
+            return response($data, 200);
+        } catch (\Exception $exception) {
+            $data = returnMessage(-1, '', $exception->getMessage());
+            return response($data, 400);
         }
     }
 }
