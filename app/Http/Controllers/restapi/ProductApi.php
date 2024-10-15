@@ -350,11 +350,6 @@ class ProductApi extends Api
                 if (!empty($keyword)) {
                     $query->where('name', 'like', '%' . $keyword . '%');
                 }
-            })
-            ->when($keyword, function ($query) use ($keyword) {
-                if (!empty($keyword)) {
-                    $query->where('description', 'like', '%' . $keyword . '%');
-                }
             });
 
         if (isset($sort) && isset($order_by) && $sort === 'asc') {

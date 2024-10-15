@@ -312,12 +312,14 @@ class AdminCategoryApi extends Api
         try {
             $category = Categories::find($id);
 
+            /* Kiểm tra danh mục có tồn tại sản phẩm hay không*/
             $products = Products::where('category_id', $id)
                 ->where('status', '!=', ProductStatus::DELETED)
                 ->get();
 
-            if (!empty($products)) {
-                $data = returnMessage(-1, null, 'Cannot delete category has products!');
+            /* Nếu danh mục có sản phẩm thì đưa về mã lỗi 400 kèm thông báo  */
+            if (count($products) > 0) {
+                $data = returnMessage(-1, null, 'Không thể xoá danh mục có sản phẩm!');
                 return response()->json($data, 400);
             }
 
