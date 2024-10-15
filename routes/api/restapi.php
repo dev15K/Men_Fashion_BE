@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\restapi\AttributeApi;
 use App\Http\Controllers\restapi\CategoryApi;
 use App\Http\Controllers\restapi\ProductApi;
 use App\Http\Controllers\restapi\PropertyApi;
@@ -29,6 +30,10 @@ Route::group(['prefix' => 'products'], function () {
 
 Route::group(['prefix' => 'reviews'], function () {
     Route::get('list', [ReviewProductApi::class, 'list'])->name('api.restapi.reviews.list');
+});
+
+Route::group(['prefix' => 'attributes'], function () {
+    Route::get('list', [AttributeApi::class, 'list'])->name('api.restapi.attributes.list');
 });
 
 Route::group(['prefix' => 'properties'], function () {
