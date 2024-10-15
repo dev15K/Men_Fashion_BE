@@ -194,6 +194,55 @@ class ProductApi extends Api
 
     /**
      * @OA\Get(
+     *     path="/api/products/get-info",
+     *     summary="Get info of a product",
+     *     description="Get info of a product",
+     *     tags={"Product"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized user"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Product not found"
+     *     )
+     * )
+     */
+    public function getInfo(Request $request)
+    {
+        $product_id = $request->input('product_id');
+        $value = $request->input('value');
+
+        $product = Products::find($product_id);
+
+        if (!$product || $product->status != ProductStatus::ACTIVE) {
+            $data = returnMessage(-1, null, 'Product not found!');
+            return response()->json($data, 404);
+        }
+
+        $product_option = ProductOptions::where('product_id', $product->id)->where('value', $value)->first();
+
+        $op = $product_option->value;
+
+        $array_value[] = json_decode($op, true);
+
+        $ops = $this->mergeOption($array_value);
+
+        $product = $product->toArray();
+
+        $product['list_options'] = $product_option->toArray();
+        $product['options'] = $ops;
+
+        $res = returnMessage(1, $product, 'Success!');
+        return response()->json($res, 200);
+    }
+
+    /**
+     * @OA\Get(
      *     path="/api/products/search",
      *     summary="Search products",
      *     description="Search products",
@@ -234,6 +283,33 @@ class ProductApi extends Api
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         description="Size",
+     *         in="query",
+     *         name="size",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         description="Sort",
+     *         in="query",
+     *         name="sort",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         description="Order by",
+     *         in="query",
+     *         name="order_by",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="successful operation"
@@ -241,19 +317,18 @@ class ProductApi extends Api
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized user"
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Product not found"
      *     )
      * )
      */
     public function search(Request $request)
     {
-        $category_id = $request->input('category_id') ?? '';
-        $min_price = $request->input('min_price') ?? '';
-        $max_price = $request->input('max_price') ?? '';
-        $keyword = $request->input('keyword') ?? '';
+        $category_id = $request->input('category_id');
+        $size = $request->input('size');
+        $sort = $request->input('sort');
+        $order_by = $request->input('order');
+        $min_price = $request->input('min_price');
+        $max_price = $request->input('max_price');
+        $keyword = $request->input('keyword');
 
         $products = Products::where('status', ProductStatus::ACTIVE)
             ->when($category_id, function ($query) use ($category_id) {
@@ -280,9 +355,24 @@ class ProductApi extends Api
                 if (!empty($keyword)) {
                     $query->where('description', 'like', '%' . $keyword . '%');
                 }
-            })
-            ->orderByDesc('id')
-            ->get();
+            });
+
+        if (isset($sort) && isset($order_by) && $sort === 'asc') {
+            $products = $products->orderBy($order_by, $sort);
+        } elseif (isset($sort) && !isset($order_by) && $sort === 'asc') {
+            $products = $products->orderBy('id', $sort);
+        } elseif (isset($order_by)) {
+            $products = $products->orderBy($order_by, 'desc');
+        } else {
+            $products = $products->orderBy('id', 'desc');
+        }
+
+        if ($size) {
+            $size = (int)$size;
+            $products->limit($size);
+        }
+
+        $products = $products->get();
 
         $data = returnMessage(1, $products, 'Success!');
         return response()->json($data, 200);

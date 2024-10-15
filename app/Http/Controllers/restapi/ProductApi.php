@@ -338,12 +338,12 @@ class ProductApi extends Api
             })
             ->when($min_price, function ($query) use ($min_price) {
                 if (!empty($min_price)) {
-                    $query->where('price', '>=', $min_price);
+                    $query->where('sale_price', '>=', $min_price);
                 }
             })
             ->when($max_price, function ($query) use ($max_price) {
                 if (!empty($max_price)) {
-                    $query->where('price', '<=', $max_price);
+                    $query->where('sale_price', '<=', $max_price);
                 }
             })
             ->when($keyword, function ($query) use ($keyword) {

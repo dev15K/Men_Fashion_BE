@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\restapi\admin;
 
 use App\Enums\CategoryStatus;
-use App\Enums\ProductStatus;
 use App\Http\Controllers\Api;
 use App\Models\Categories;
-use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -311,15 +309,6 @@ class AdminCategoryApi extends Api
     {
         try {
             $category = Categories::find($id);
-
-            $products = Products::where('category_id', $id)
-                ->where('status', '!=', ProductStatus::DELETED)
-                ->get();
-
-            if (!empty($products)) {
-                $data = returnMessage(-1, null, 'Cannot delete category has products!');
-                return response()->json($data, 400);
-            }
 
             $category->status = CategoryStatus::DELETED;
             $category->deleted_by = Auth::user()->id;
