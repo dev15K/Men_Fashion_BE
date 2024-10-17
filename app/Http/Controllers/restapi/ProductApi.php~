@@ -222,9 +222,8 @@ class ProductApi extends Api
             $product_option->whereJsonContains('value', ['property_item' => $property]);
         }
 
-        $product_option = $product_option->first();
 
-        $res = returnMessage(1, $product_option, 'Success!');
+        $res = returnMessage(1, $product, 'Success!');
         return response()->json($res, 200);
     }
 
