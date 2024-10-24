@@ -60,7 +60,7 @@ class ProductApi extends Api
             $products->limit((int)$size);
         }
 
-        $products = $products->select('products.*')->get();
+        $products = $products->select('products.*')->distinct()->get();
         $data = returnMessage(1, $products, 'Success!');
         return response()->json($data, 200);
     }
@@ -298,6 +298,15 @@ class ProductApi extends Api
      *         )
      *     ),
      *     @OA\Parameter(
+     *          description="Option",
+     *          in="query",
+     *          name="option",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *     @OA\Parameter(
      *         description="Size",
      *         in="query",
      *         name="size",
@@ -374,7 +383,7 @@ class ProductApi extends Api
             $products->limit((int)$size);
         }
 
-        $products = $products->select('products.*')->get();
+        $products = $products->select('products.*')->distinct()->get();
 
         return response()->json(returnMessage(1, $products, 'Success!'), 200);
     }

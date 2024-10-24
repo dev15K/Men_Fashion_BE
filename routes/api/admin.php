@@ -54,7 +54,7 @@ Route::group(['prefix' => 'products'], function () {
 Route::group(['prefix' => 'orders'], function () {
     Route::get('list', [AdminOrderApi::class, 'list'])->name('api.admin.orders.list');
     Route::get('detail/{id}', [AdminOrderApi::class, 'detail'])->name('api.admin.orders.detail');
-    Route::put('update/{id}', [AdminOrderApi::class, 'update'])->name('api.admin.orders.update');
+    Route::post('update/{id}', [AdminOrderApi::class, 'update'])->name('api.admin.orders.update');
 });
 
 Route::group(['prefix' => 'reviews'], function () {
