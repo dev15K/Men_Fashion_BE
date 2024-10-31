@@ -169,6 +169,13 @@ class AdminCouponApi extends Api
             $coupon->code = $code;
         }
 
+        if ($request->hasFile('thumbnail')) {
+            $item = $request->file('thumbnail');
+            $itemPath = $item->store('coupon', 'public');
+            $thumbnail = asset('storage/' . $itemPath);
+            $coupon->thumbnail = $thumbnail;
+        }
+
         $coupon->description = $description;
         $coupon->type = $type;
         $coupon->discount_percent = $discount_percent;

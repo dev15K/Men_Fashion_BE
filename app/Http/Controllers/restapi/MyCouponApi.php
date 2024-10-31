@@ -30,7 +30,14 @@ class MyCouponApi extends Api
         try {
             $coupons = MyCoupons::where('user_id', $this->user['id'])
                 ->orderByDesc('id')
-                ->get();
+                ->cursor()
+                ->map(function ($item) {
+                    $mycoupon = $item->toArray();
+
+                    $coupon = Coupons::where('id', $item->coupon_id)->first();
+                    $mycoupon['coupon'] = $coupon->toArray();
+                    return $mycoupon;
+                });
             $data = returnMessage(1, $coupons, 'Success');
 
             return response($data, 200);
@@ -48,6 +55,8 @@ class MyCouponApi extends Api
 
             $coupons = MyCoupons::where('my_coupons.user_id', $this->user['id'])
                 ->join('coupons', 'coupons.id', '=', 'my_coupons.coupon_id')
+                ->where('my_coupons.status', MyCouponStatus::UNUSED)
+                ->select('my_coupons.*', 'coupons.*') // Adjust selection as needed
                 ->orderByDesc('my_coupons.id');
 
             if ($code) {
@@ -58,7 +67,7 @@ class MyCouponApi extends Api
                 $coupons->where('coupons.name', 'like', "%$name%");
             }
 
-            $coupons->get();
+            $coupons = $coupons->get();
 
             $data = returnMessage(1, $coupons, 'Success');
             return response($data, 200);
