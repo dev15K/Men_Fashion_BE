@@ -59,7 +59,7 @@ class AdminCouponApi extends Api
             $coupon = Coupons::find($id);
 
             if (!$coupon || $coupon->status == CouponStatus::DELETED) {
-                $data = returnMessage(-1, '', 'Coupon not found!');
+                $data = returnMessage(-1, '', 'Không tìm thấy phiếu giảm giá!');
                 return response($data, 404);
             }
 
@@ -93,7 +93,7 @@ class AdminCouponApi extends Api
             $coupon = Coupons::find($id);
 
             if (!$coupon || $coupon->status == CouponStatus::DELETED) {
-                $data = returnMessage(-1, '', 'Coupon not found!');
+                $data = returnMessage(-1, '', 'Không tìm thấy phiếu giảm giá!');
                 return response($data, 404);
             }
 
@@ -114,7 +114,7 @@ class AdminCouponApi extends Api
             $coupon = Coupons::find($id);
 
             if (!$coupon || $coupon->status == CouponStatus::DELETED) {
-                $data = returnMessage(-1, '', 'Coupon not found!');
+                $data = returnMessage(-1, '', 'Không tìm thấy phiếu giảm giá!');
                 return response($data, 404);
             }
 

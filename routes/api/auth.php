@@ -46,6 +46,7 @@ Route::group(['prefix' => 'checkout'], function () {
 
 Route::group(['prefix' => 'reviews'], function () {
     Route::post('create', [ReviewProductApi::class, 'store'])->name('api.auth.reviews.store');
+    Route::get('check', [ReviewProductApi::class, 'check'])->name('api.restapi.reviews.check');
 });
 
 Route::group(['prefix' => 'my-coupons'], function () {

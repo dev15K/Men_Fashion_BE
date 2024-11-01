@@ -59,7 +59,7 @@ class CouponApi extends Api
             $coupon = Coupons::find($id);
 
             if (!$coupon || $coupon->status != CouponStatus::ACTIVE) {
-                $data = returnMessage(-1, '', 'Coupon not found!');
+                $data = returnMessage(-1, '', 'Không tìm thấy phiếu giảm giá!');
                 return response($data, 404);
             }
 

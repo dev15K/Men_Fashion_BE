@@ -83,14 +83,14 @@ class MyCouponApi extends Api
             $coupon = MyCoupons::find($id);
 
             if (!$coupon) {
-                $data = returnMessage(-1, '', 'Coupon not found!');
+                $data = returnMessage(-1, '', 'Không tìm thấy phiếu giảm giá!');
                 return response($data, 404);
             }
 
             $coupon = Coupons::where($coupon->coupon_id);
 
             if (!$coupon || $coupon->status != CouponStatus::ACTIVE) {
-                $data = returnMessage(-1, '', 'Coupon not found!');
+                $data = returnMessage(-1, '', 'Không tìm thấy phiếu giảm giá!');
                 return response($data, 404);
             }
 
@@ -112,14 +112,14 @@ class MyCouponApi extends Api
             $coupon = Coupons::find($coupon_id);
 
             if (!$coupon || $coupon->status != CouponStatus::ACTIVE) {
-                $data = returnMessage(-1, '', 'Coupon not found!');
+                $data = returnMessage(-1, '', 'Không tìm thấy phiếu giảm giá!');
                 return response($data, 404);
             }
 
-            $count = MyCoupons::where('coupon_id', $coupon_id)->count();
+            $count = MyCoupons::where('coupon_id', $coupon_id)->where('user_id', $user_id)->count();
 
             if ($count >= $coupon->max_set) {
-                $data = returnMessage(-1, '', 'Maximum storage limit reached!');
+                $data = returnMessage(-1, '', 'Đã đạt đến giới hạn lưu trữ tối đa!');
                 return response($data, 400);
             }
 
@@ -145,7 +145,7 @@ class MyCouponApi extends Api
             $coupon = MyCoupons::find($id);
 
             if (!$coupon || $coupon->status != CouponStatus::ACTIVE) {
-                $data = returnMessage(-1, '', 'Coupon not found!');
+                $data = returnMessage(-1, '', 'Không tìm thấy phiếu giảm giá!');
                 return response($data, 404);
             }
 

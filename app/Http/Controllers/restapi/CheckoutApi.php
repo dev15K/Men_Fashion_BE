@@ -413,7 +413,7 @@ class CheckoutApi extends Api
         $order->status = $status;
 
         $order->user_id = $user_id;
-        $order->coupon_id = $coupon_id;
+        $order->coupon_id = $coupon_id != "" ? $coupon_id : null;
 
         $order_created = $order->save();
 
