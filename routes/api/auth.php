@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'users'], function () {
     Route::get('get-info', [UserApi::class, 'getUserFromToken'])->name('api.auth.users.information');
+    Route::post('update-info', [UserApi::class, 'updateInfo'])->name('api.auth.users.update');
+    Route::post('change-password', [UserApi::class, 'changePassword'])->name('api.auth.users.change.password');
 });
 
 Route::group(['prefix' => 'carts'], function () {

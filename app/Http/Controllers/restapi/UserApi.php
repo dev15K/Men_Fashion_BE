@@ -174,7 +174,8 @@ class UserApi extends Api
     {
         try {
             $password = $request->input('password');
-            $password_confirm = $request->input('password_confirm');
+            $password_confirm = $request->input('newpassword');
+            $new_password_confirm = $request->input('renewpassword');
 
             $user = JWTAuth::parseToken()->authenticate();
             $user = $user->toArray();
@@ -186,17 +187,17 @@ class UserApi extends Api
                 return response($data, 400);
             }
 
-            if ($password != $password_confirm) {
+            if ($new_password_confirm != $password_confirm) {
                 $data = returnMessage(-1, '', 'Password not match!');
                 return response($data, 400);
             }
 
-            if (strlen($password) < 5) {
+            if (strlen($password_confirm) < 5) {
                 $data = returnMessage(-1, '', 'Password must be at least 5 characters!');
                 return response($data, 400);
             }
 
-            $passwordHash = Hash::make($password);
+            $passwordHash = Hash::make($password_confirm);
             $user->password = $passwordHash;
             $user->save();
 
