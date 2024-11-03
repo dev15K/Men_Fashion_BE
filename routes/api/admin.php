@@ -13,6 +13,7 @@
 
 use App\Http\Controllers\restapi\admin\AdminAttributeApi;
 use App\Http\Controllers\restapi\admin\AdminCategoryApi;
+use App\Http\Controllers\restapi\admin\AdminCouponApi;
 use App\Http\Controllers\restapi\admin\AdminOrderApi;
 use App\Http\Controllers\restapi\admin\AdminProductApi;
 use App\Http\Controllers\restapi\admin\AdminPropertyApi;
@@ -67,6 +68,14 @@ Route::group(['prefix' => 'reviews'], function () {
 
 Route::group(['prefix' => 'revenues'], function () {
     Route::get('list', [AdminRevenueApi::class, 'list'])->name('api.admin.revenues.list');
+});
+
+Route::group(['prefix' => 'coupons'], function () {
+    Route::get('list', [AdminCouponApi::class, 'list'])->name('api.admin.coupons.list');
+    Route::get('detail/{id}', [AdminCouponApi::class, 'detail'])->name('api.admin.coupons.detail');
+    Route::post('create', [AdminCouponApi::class, 'create'])->name('api.admin.coupons.create');
+    Route::post('update/{id}', [AdminCouponApi::class, 'update'])->name('api.admin.coupons.update');
+    Route::delete('delete/{id}', [AdminCouponApi::class, 'delete'])->name('api.admin.coupons.delete');
 });
 
 Route::group(['prefix' => 'users'], function () {
