@@ -108,7 +108,6 @@ class UserApi extends Api
             $user->full_name = $full_name;
 
             if ($user->email != $email) {
-                $user->email = $email;
 
                 $isEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
                 if (!$isEmail) {
@@ -117,15 +116,16 @@ class UserApi extends Api
                 }
 
                 $isValid = User::checkEmail($email);
-                if ($isValid) {
+                if (!$isValid) {
                     $data = returnMessage(-1, '', 'Email already exists!');
                     return response($data, 400);
                 }
+                $user->email = $email;
             }
 
             if ($user->phone != $phone) {
                 $isValid = User::checkPhone($phone);
-                if ($isValid) {
+                if (!$isValid) {
                     $data = returnMessage(-1, '', 'Phone already exists!');
                     return response($data, 400);
                 }
