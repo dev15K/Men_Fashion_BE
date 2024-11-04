@@ -5,11 +5,15 @@ namespace App\Http\Controllers\restapi\admin;
 use App\Enums\OrderStatus;
 use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
+use App\Models\OrderItems;
 use App\Models\Orders;
+use App\Models\Products;
 use App\Models\Revenues;
 use App\Models\User;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AdminHomeApi extends Controller
@@ -18,7 +22,8 @@ class AdminHomeApi extends Controller
 
     public function __construct()
     {
-        $this->now = Carbon::now();
+        Carbon::now('Asia/Ho_Chi_Minh');
+        $this->now = (new DateTime())->format('Y-m-d H:i:s');
     }
 
     public function dashboard(Request $request)
@@ -33,6 +38,7 @@ class AdminHomeApi extends Controller
                 'order_action' => $this->calculateOrder($type, $size, $sort, $keyword),
                 'member_action' => $this->calculateMembers($type, $size, $sort, $keyword),
                 'revenue_action' => $this->calculateRevenue($type, $size, $sort, $keyword),
+                'products_action' => $this->getTopProduct($type, $size, $sort, $keyword),
             ];
 
             $res = returnMessage(1, $data, 'Success');
@@ -44,22 +50,41 @@ class AdminHomeApi extends Controller
         }
     }
 
+    public function getTopProduct($type, $size, $sort, $keyword)
+    {
+        $topProducts = DB::table('products as p')
+            ->join('order_items as oi', 'p.id', '=', 'oi.product_id')
+            ->select('p.id', 'p.name', 'p.sale_price', 'p.thumbnail', DB::raw('SUM(oi.quantity) as total_sold'))
+            ->groupBy('p.id', 'p.name', 'p.sale_price', 'p.thumbnail')
+            ->orderByDesc('total_sold')
+            ->limit(10)
+            ->get();
+
+        return [
+            'top_products' => $topProducts,
+        ];
+    }
+
     private function calculateMembers($type, $size, $sort, $keyword)
     {
         $members = User::where('status', '!=', UserStatus::DELETED);
 
         $totalMembers = $members->count();
-        $currentMember = $members->where('created_at', '>=', Carbon::now()->startOfMonth())
-            ->where('created_at', '<=', Carbon::now()->endOfMonth())
-            ->count();
-        $prevMembers = $members->where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth())
-            ->where('created_at', '<=', Carbon::now()->subMonth()->endOfMonth())
-            ->count();
+
+        $currentMember = $members->whereBetween('created_at', [
+            Carbon::parse($this->now)->startOfMonth(),
+            Carbon::parse($this->now)->endOfMonth()
+        ])->count();
+
+        $prevMembers = $members->whereBetween('created_at', [
+            Carbon::parse($this->now)->subMonth()->startOfMonth(),
+            Carbon::parse($this->now)->subMonth()->endOfMonth()
+        ])->count();
 
         $is_increase = $currentMember >= $prevMembers;
 
         if ($prevMembers === 0 && $currentMember > 0) {
-            $percentChange = 100;
+            $percentChange = $currentMember * 100;
         } elseif ($prevMembers > 0) {
             $percentChange = round(abs(($currentMember - $prevMembers) / $prevMembers) * 100, 2);
         } else {
@@ -81,26 +106,35 @@ class AdminHomeApi extends Controller
             ->where('status', '!=', OrderStatus::DELETED);
 
         $totalOrder = $orders->count();
-        $currentOrder = $orders->where('created_at', '>=', Carbon::now()->startOfMonth())
-            ->where('created_at', '<=', Carbon::now()->endOfMonth())
-            ->count();
 
-        $prevOrder = $orders->where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth())
-            ->where('created_at', '<=', Carbon::now()->subMonth()->endOfMonth())
-            ->count();
+        $currentOrder = $orders->whereBetween('created_at', [
+            Carbon::parse($this->now)->startOfMonth(),
+            Carbon::parse($this->now)->endOfMonth()
+        ])->count();
+
+        $prevOrder = $orders->whereBetween('created_at', [
+            Carbon::parse($this->now)->subMonth()->startOfMonth(),
+            Carbon::parse($this->now)->subMonth()->endOfMonth()
+        ])->count();
 
         $is_increase = $currentOrder >= $prevOrder;
 
         if ($prevOrder === 0 && $currentOrder > 0) {
-            $percentChange = 100;
+            $percentChange = $currentOrder * 100;
         } elseif ($prevOrder > 0) {
             $percentChange = round(abs(($currentOrder - $prevOrder) / $prevOrder) * 100, 2);
         } else {
             $percentChange = 0;
         }
 
+        $recentOrder = $orders->whereBetween('created_at', [
+            Carbon::parse($this->now)->startOfDay(),
+            Carbon::parse($this->now)->endOfDay()
+        ])->orderByDesc('id')->get();
+
         return [
             'total_order' => $totalOrder,
+            'recent_order' => $recentOrder,
             'current_order' => $currentOrder,
             'prev_order' => $prevOrder,
             'is_increase' => $is_increase,
@@ -131,9 +165,6 @@ class AdminHomeApi extends Controller
         $currentCount = $membersQuery->where($dateField, '>=', $currentDate->startOfMonth())
             ->where($dateField, '<=', $currentDate->endOfMonth());
 
-        $s = $time->month;
-        $e = $currentDate->endOfMonth();
-
         $prevCount = $membersQuery->where($dateField, '>=', $currentDate->subMonth()->startOfMonth())
             ->where($dateField, '<=', $currentDate->subMonth()->endOfMonth());
 
@@ -157,9 +188,6 @@ class AdminHomeApi extends Controller
             'sort' => $sort,
             'keyword' => $keyword,
 
-            's' => $s,
-            'e' => $e,
-
             'previous' => $prevCount,
             'is_increase' => $isIncrease,
             'percent_change' => $percentChange,
@@ -169,7 +197,7 @@ class AdminHomeApi extends Controller
     private function calculateRevenue($type, $size, $sort, $keyword)
     {
         $totalRevenue = Revenues::sum('total');
-        $currentMonth = Carbon::now()->month;
+        $currentMonth = Carbon::parse($this->now)->month;
         $currentTotalRevenue = Revenues::where('month', $currentMonth)->sum('total');
         $prevTotalRevenue = Revenues::where('month', $currentMonth - 1)->sum('total');
 
