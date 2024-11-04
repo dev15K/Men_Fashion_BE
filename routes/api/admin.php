@@ -15,12 +15,15 @@ use App\Http\Controllers\restapi\admin\AdminAttributeApi;
 use App\Http\Controllers\restapi\admin\AdminCategoryApi;
 use App\Http\Controllers\restapi\admin\AdminContactApi;
 use App\Http\Controllers\restapi\admin\AdminCouponApi;
+use App\Http\Controllers\restapi\admin\AdminHomeApi;
 use App\Http\Controllers\restapi\admin\AdminOrderApi;
 use App\Http\Controllers\restapi\admin\AdminProductApi;
 use App\Http\Controllers\restapi\admin\AdminPropertyApi;
 use App\Http\Controllers\restapi\admin\AdminRevenueApi;
 use App\Http\Controllers\restapi\admin\AdminReviewProductApi;
 use App\Http\Controllers\restapi\admin\AdminUserApi;
+
+Route::get('dashboard', [AdminHomeApi::class, 'dashboard'])->name('api.admin.home.dashboard');
 
 Route::group(['prefix' => 'categories'], function () {
     Route::get('list', [AdminCategoryApi::class, 'list'])->name('api.admin.categories.list');

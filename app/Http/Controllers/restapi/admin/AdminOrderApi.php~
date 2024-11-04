@@ -10,7 +10,6 @@ use App\Models\Orders;
 use App\Models\ProductOptions;
 use App\Models\Products;
 use App\Models\Revenues;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -215,11 +214,6 @@ class AdminOrderApi extends Api
                 $revenue = new Revenues();
                 $revenue->total = $order->total_price;
                 $revenue->order_id = $order->id;
-
-                $revenue->date = Carbon::now()->day;
-                $revenue->month = Carbon::now()->month;
-                $revenue->year = Carbon::now()->year;
-
                 $revenue->save();
             }
             $data = returnMessage(1, $order, 'Update order success');
