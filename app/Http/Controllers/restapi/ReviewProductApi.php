@@ -139,8 +139,7 @@ class ReviewProductApi extends Api
 
     public function check(Request $request)
     {
-        $user = JWTAuth::parseToken()->authenticate();
-        $user = $user->toArray();
+        $user = JWTAuth::parseToken()->authenticate()->toArray();
 
         $product_id = $request->input('product_id');
 
@@ -148,31 +147,24 @@ class ReviewProductApi extends Api
             ->where('status', OrderStatus::COMPLETED)
             ->pluck('id');
 
-        $orderID = '';
-        $isValid = false;
-
-        $orderItem = OrderItems::whereIn('order_id', $completedOrderIds)
+        $orderItems = OrderItems::whereIn('order_id', $completedOrderIds)
             ->where('product_id', $product_id)
-            ->first();
+            ->get();
 
-        if ($orderItem) {
-            $orderID = $orderItem->order_id;
+        $isValid = false;
+        $orderID = '';
 
-            $reviewExists = Reviews::where('product_id', $product_id)
-                ->where('order_id', $orderID)
-                ->exists();
-
-            if ($reviewExists) {
-                $data = returnMessage(1, $isValid, 'success');
-                return response($data, 200);
+        foreach ($orderItems as $orderItem) {
+            if (Reviews::where('product_id', $product_id)
+                ->where('order_id', $orderItem->order_id)
+                ->exists()
+            ) {
+                return response(returnMessage(1, false, 'Review already exists'), 200);
             }
-
             $isValid = true;
+            $orderID = $orderItem->order_id;
         }
 
-        $res['valid'] = $isValid;
-        $res['order'] = $orderID;
-        $data = returnMessage(1, $res, 'success');
-        return response($data, 200);
+        return response(returnMessage(1, ['valid' => $isValid, 'order' => $orderID], 'success'), 200);
     }
 }
