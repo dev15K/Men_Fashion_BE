@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2024 at 01:02 PM
+-- Generation Time: Nov 07, 2024 at 10:26 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -66,7 +66,7 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `product_id`, `quantity`, `user_id`, `values`, `created_at`, `updated_at`) VALUES
-(1, 4, 1, 1, '18', '2024-11-05 11:58:31', '2024-11-05 11:58:31');
+(14, 4, 1, 1, '18', '2024-11-07 04:01:08', '2024-11-07 04:01:08');
 
 -- --------------------------------------------------------
 
@@ -262,6 +262,21 @@ CREATE TABLE `orders` (
   `coupon_id` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `full_name`, `email`, `phone`, `address`, `reason_cancel`, `products_price`, `shipping_price`, `discount_price`, `total_price`, `notes`, `order_method`, `status`, `created_at`, `updated_at`, `coupon_id`) VALUES
+(1, 1, 'user', 'user@gmail.com', '0989889889', 'HAIPHONG, Gần hồ Tây, Tây Hồ, Hà Nội', NULL, 11160000, 0, 0, 11160000, 'ok', 'Thanh toán khi nhận hàng', 'ĐÃ HOÀN THÀNH', '2024-11-07 02:29:48', '2024-11-07 02:33:41', NULL),
+(2, 1, 'user', 'user@gmail.com', '0989889889', 'HAIPHONG, Gần hồ Tây, Tây Hồ, Hà Nội', NULL, 800000, 0, 0, 800000, 'y', 'Thanh toán khi nhận hàng', 'ĐÃ HOÀN THÀNH', '2024-11-07 02:30:07', '2024-11-07 02:33:48', NULL),
+(3, 1, 'user', 'user@gmail.com', '0989889889', 'HAIPHONG, 43534', NULL, 10800000, 0, 0, 10800000, 'ok', 'Thanh toán khi nhận hàng', 'ĐÃ HOÀN THÀNH', '2024-11-07 02:30:28', '2024-11-07 02:33:54', NULL),
+(4, 1, 'user', 'user@gmail.com', '0989889889', 'HAIPHONG, Hai Phong, Hai Phong, Hai Phong, Hai Phong', NULL, 3110000, 0, 0, 3110000, '444', 'Thanh toán khi nhận hàng', 'ĐÃ HOÀN THÀNH', '2024-11-07 02:30:59', '2024-11-07 02:34:02', NULL),
+(5, 1, 'user', 'user@gmail.com', '0989889889', 'HAIPHONG, Hai Phong, Hai Phong, Hai Phong, Hai Phong', NULL, 160000, 0, 0, 160000, 'sss', 'Thanh toán khi nhận hàng', 'ĐÃ HOÀN THÀNH', '2024-11-07 02:31:21', '2024-11-07 02:34:10', NULL),
+(6, 1, 'user', 'user@gmail.com', '0989889889', 'HAIPHONG, Gần hồ Tây, Tây Hồ, Hà Nội', NULL, 888000, 0, 0, 888000, 'a', 'Thanh toán khi nhận hàng', 'ĐÃ HOÀN THÀNH', '2024-11-07 02:31:37', '2024-11-07 02:34:19', NULL),
+(7, 1, 'user', 'user@gmail.com', '0989889889', 'HAIPHONG, 34', NULL, 1260000, 0, 0, 1260000, '345', 'Thanh toán khi nhận hàng', 'ĐÃ HOÀN THÀNH', '2024-11-07 02:32:15', '2024-11-07 02:34:59', NULL),
+(8, 1, 'user', 'user@gmail.com', '0989889889', 'HAIPHONG, 535345', NULL, 1960000, 0, 0, 1960000, '34543', 'Thanh toán khi nhận hàng', 'ĐÃ HOÀN THÀNH', '2024-11-07 02:32:36', '2024-11-07 02:35:07', NULL),
+(9, 1, 'user', 'user@gmail.com', '0989889889', 'HAIPHONG, Gần hồ Tây, Tây Hồ, Hà Nội', NULL, 24442000, 0, 0, 24442000, 't', 'Thanh toán khi nhận hàng', 'ĐÃ HOÀN THÀNH', '2024-11-07 02:33:00', '2024-11-07 02:33:33', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -278,6 +293,25 @@ CREATE TABLE `order_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`, `value`, `created_at`, `updated_at`) VALUES
+(1, 1, 4, 1, 160000, '18', '2024-11-07 02:29:48', '2024-11-07 02:29:48'),
+(2, 1, 6, 10, 1100000, '25', '2024-11-07 02:29:48', '2024-11-07 02:29:48'),
+(3, 2, 4, 5, 160000, '18', '2024-11-07 02:30:07', '2024-11-07 02:30:07'),
+(4, 3, 5, 6, 1800000, '21', '2024-11-07 02:30:28', '2024-11-07 02:30:28'),
+(5, 4, 1, 1, 2222000, '1', '2024-11-07 02:30:59', '2024-11-07 02:30:59'),
+(6, 4, 3, 1, 888000, '11', '2024-11-07 02:30:59', '2024-11-07 02:30:59'),
+(7, 5, 4, 1, 160000, '18', '2024-11-07 02:31:21', '2024-11-07 02:31:21'),
+(8, 6, 3, 1, 888000, '11', '2024-11-07 02:31:37', '2024-11-07 02:31:37'),
+(9, 7, 4, 1, 160000, '18', '2024-11-07 02:32:15', '2024-11-07 02:32:15'),
+(10, 7, 6, 1, 1100000, '25', '2024-11-07 02:32:15', '2024-11-07 02:32:15'),
+(11, 8, 4, 1, 160000, '18', '2024-11-07 02:32:36', '2024-11-07 02:32:36'),
+(12, 8, 5, 1, 1800000, '21', '2024-11-07 02:32:36', '2024-11-07 02:32:36'),
+(13, 9, 1, 11, 2222000, '1', '2024-11-07 02:33:00', '2024-11-07 02:33:00');
 
 -- --------------------------------------------------------
 
@@ -346,7 +380,7 @@ INSERT INTO `products` (`id`, `name`, `short_description`, `description`, `thumb
 (3, 'Áo polo nam cao cấp LPS096S4', '<p>- Kh&aacute;ch h&agrave;ng được sửa chữa miễn ph&iacute; trong trường hợp sản phẩm lỗi từ ph&iacute;a nh&agrave; sản xuất: đứt chỉ, bong chỉ, hư kho&aacute;, mất c&uacute;c, l&agrave; phẳng<br>- Đổi mới sản phẩm nếu sản phẩm kh&aacute;ch mua bị r&aacute;ch vải, x&ugrave; vải do lỗi nh&agrave; sản xuất<br>- Đổi mới sản phẩm nếu sản phẩm kh&aacute;ch mua bị ra m&agrave;u nhiều dẫn tới bạc vải, phai m&agrave;u sang m&agrave;u phối c&ugrave;ng (đối với quần/&aacute;o phối m&agrave;u)<br>- Đối với bộ đồ (bộ nỉ, bộ gi&oacute;) nếu sản phẩm bị lỗi &aacute;o hoặc quần th&igrave; sẽ bảo h&agrave;nh theo sản phẩm &aacute;o hoặc quần bị lỗi chứ kh&ocirc;ng bảo h&agrave;nh nguy&ecirc;n bộ.</p>', '<h3 class=\"title_info\">Th&ocirc;ng tin chi tiết</h3>\r\n<p class=\"title-info\">M&ocirc; tả chi tiết về sản phẩm</p>\r\n<p class=\"item-info\"><span class=\"left-tag\">Thương hiệu</span><span class=\"right-tag\">Savani</span></p>\r\n<p class=\"item-info\"><span class=\"left-tag\">M&atilde; sản phẩm</span><span class=\"right-tag\">LPS096S4</span></p>\r\n<p class=\"item-info\"><span class=\"left-tag\">Chất liệu</span><span class=\"right-tag\">85% Polyamide, 15% Spandex</span></p>\r\n<p class=\"item-info\"><span class=\"left-tag\">Xuất xứ</span><span class=\"right-tag\">Việt Nam</span></p>\r\n<p class=\"item-info\"><span class=\"left-tag\">Kiểu d&aacute;ng</span><span class=\"right-tag\">Slim fit</span></p>\r\n<p class=\"item-info\"><span class=\"left-tag\">Ưu điểm</span><span class=\"right-tag\">&Aacute;o polo nam cao cấp fit d&aacute;ng, vừa vặn với th&acirc;n h&igrave;nh đi c&ugrave;ng với c&aacute;c khuyến m&atilde;i cực hấp dẫn</span></p>\r\n<div class=\"content\">\r\n<h3>Th&ocirc;ng tin sản phẩm:</h3>\r\n<ul>\r\n<li>M&atilde; sản phẩm: LPS096S4</li>\r\n<li>Kiểu d&aacute;ng: Slim fit</li>\r\n<li>M&agrave;u sắc: &nbsp;Xanh navy, Cam, Trắng</li>\r\n<li>Th&ocirc;ng số size: &nbsp;S- M - L - XL - &nbsp;XXL - XXXL</li>\r\n<li>Chất liệu vải: Polyamide<em>&nbsp;(L&agrave; sợi tổng hợp được tạo ra từ c&aacute;c sợi polyme, h&igrave;nh th&agrave;nh qua phản ứng cacbon trong than v&agrave; dầu th&ocirc; dưới nhiệt độ cao)</em></li>\r\n<li>Th&agrave;nh phần: 85% Polyamide, 15% Spandex</li>\r\n</ul>\r\n<p><img src=\"https://savani.vn/upload_images/images/2024/09/24/chi-tiet-san-pham-ao-polo-nam(3).png\" alt=\"Chi tiết sản phẩm &aacute;o polo nam\"></p>\r\n<h3>Đặc điểm nổi bật:</h3>\r\n<h4>Thiết kế:</h4>\r\n<p>-&nbsp;<a href=\"https://savani.vn/ao-polo-nam-pc7.html\"><strong>&Aacute;o polo</strong></a>&nbsp;kết hợp h&agrave;i h&ograve;a giữa sự lịch l&atilde;m của &aacute;o sơ mi v&agrave; sự thoải m&aacute;i của &aacute;o thun, tạo n&ecirc;n phong c&aacute;ch vừa thanh lịch vừa năng động.<br>- Với thiết kế cổ bẻ đặc trưng, &aacute;o polo mang đến vẻ ngo&agrave;i chỉn chu nhưng kh&ocirc;ng k&eacute;m phần thoải m&aacute;i, ph&ugrave; hợp cho cả m&ocirc;i trường c&ocirc;ng sở lẫn c&aacute;c buổi dạo phố, gặp gỡ bạn b&egrave;.</p>\r\n<p><img src=\"https://savani.vn/upload_images/images/2024/09/24/dac-diem-noi-bat-cua-ao-polo-nam(3).png\" alt=\"Đặc điểm nổi bật của &aacute;o polo nam\"></p>\r\n<h4>Chất liệu:</h4>\r\n<ul>\r\n<li>Vải polyamide sở hữu khả năng chống thấm nước vượt trội, gi&uacute;p ngăn chặn ẩm mốc v&agrave; vi khuẩn một c&aacute;ch hiệu quả, mang lại độ bền cao v&agrave; sự an to&agrave;n cho người sử dụng.</li>\r\n<li>Với bề mặt nhẵn b&oacute;ng v&agrave; mịn m&agrave;ng, vải polyamide c&oacute; t&iacute;nh ứng dụng cao trong nhiều lĩnh vực, mang đến vẻ đẹp tinh tế v&agrave; chất lượng vượt trội cho c&aacute;c sản phẩm.</li>\r\n</ul>\r\n<h4>Ứng dụng:</h4>\r\n<p>- &Aacute;o polo thường được l&agrave;m từ chất liệu cotton hoặc polyamide, mang lại cảm gi&aacute;c tho&aacute;ng m&aacute;t v&agrave; dễ chịu cho người mặc. Chất liệu bền bỉ, &iacute;t nhăn v&agrave; dễ chăm s&oacute;c, gi&uacute;p &aacute;o polo giữ được vẻ đẹp l&acirc;u d&agrave;i v&agrave; lu&ocirc;n trong trạng th&aacute;i ho&agrave;n hảo. Đ&acirc;y ch&iacute;nh l&agrave; lựa chọn l&yacute; tưởng cho những ai t&igrave;m kiếm sự kết hợp giữa thời trang v&agrave; tiện lợi.</p>\r\n<p><img src=\"https://savani.vn/upload_images/images/2024/09/24/cac-uu-diem-cua-ao-polo-nam(3).png\" alt=\"C&aacute;c ưu điểm của &aacute;o polo nam\"></p>\r\n<h3>C&aacute;ch bảo quản &aacute;o polo nam đ&uacute;ng c&aacute;ch:&nbsp;</h3>\r\n<p>Mọi trang phục đều c&oacute; tuổi thọ nhất định. Nhưng nếu biết c&aacute;ch bạn c&oacute; thể giữ được form d&aacute;ng chuẩn v&agrave; k&eacute;o d&agrave;i được thời gian sử dụng của &aacute;o polo l&acirc;u hơn.</p>\r\n<ol>\r\n<li>Ph&acirc;n loại trước khi giặt.&nbsp;</li>\r\n<li>Chọn chế độ giặt nhẹ đối với m&aacute;y giặt</li>\r\n<li>Lộn tr&aacute;i sản phẩm để giặt v&agrave; phơi</li>\r\n<li>Sử dụng nước lạnh để giặt, kh&ocirc;ng ng&acirc;m l&acirc;u trong h&oacute;a chất</li>\r\n<li>D&ugrave;ng m&oacute;c để phơi đồ</li>\r\n<li>N&ecirc;n để kh&ocirc; tự nhi&ecirc;n v&agrave; kh&ocirc;ng phơi trực tiếp dưới &aacute;nh nắng mặt trời.</li>\r\n</ol>\r\n<h3>Ch&iacute;nh s&aacute;ch đổi trả:</h3>\r\n<ul>\r\n<li>&Aacute;p dụng đổi h&agrave;ng trong c&aacute;c trường hợp sản phẩm kh&aacute;ch mua kh&ocirc;ng hợp size, số, m&agrave;u sắc, kiểu d&aacute;ng</li>\r\n<li>Sản phẩm c&ograve;n nguy&ecirc;n vẹn, nguy&ecirc;n tem m&aacute;c, chưa giặt, chưa qua sử dụng v&agrave; sửa chữa</li>\r\n<li>Sản phẩm mua kh&ocirc;ng nằm trong nh&oacute;m sản phẩm sale sốc</li>\r\n<li>Gi&aacute; trị sản phẩm đổi: bằng hoặc cao hơn gi&aacute; trị sản phẩm đ&atilde; mua trước đ&oacute;</li>\r\n</ul>\r\n<p><img src=\"https://savani.vn/upload_images/images/2024/09/24/chinh-sach-mua-hang-tai-savani(3).png\" alt=\"Ch&iacute;nh s&aacute;ch mua h&agrave;ng tại Savani\"></p>\r\n<h3>Ch&iacute;nh s&aacute;ch bảo h&agrave;nh:</h3>\r\n<p>- Kh&aacute;ch h&agrave;ng được sửa chữa miễn ph&iacute; trong trường hợp sản phẩm lỗi từ ph&iacute;a nh&agrave; sản xuất: đứt chỉ, bong chỉ, hư kho&aacute;, mất c&uacute;c, l&agrave; phẳng<br>- Đổi mới sản phẩm nếu sản phẩm kh&aacute;ch mua bị r&aacute;ch vải, x&ugrave; vải do lỗi nh&agrave; sản xuất<br>- Đổi mới sản phẩm nếu sản phẩm kh&aacute;ch mua bị ra m&agrave;u nhiều dẫn tới bạc vải, phai m&agrave;u sang m&agrave;u phối c&ugrave;ng (đối với quần/&aacute;o phối m&agrave;u)<br>- Đối với bộ đồ (bộ nỉ, bộ gi&oacute;) nếu sản phẩm bị lỗi &aacute;o hoặc quần th&igrave; sẽ bảo h&agrave;nh theo sản phẩm &aacute;o hoặc quần bị lỗi chứ kh&ocirc;ng bảo h&agrave;nh nguy&ecirc;n bộ.</p>\r\n<h3>QUY ĐỊNH VỀ PH&Iacute; VẬN CHUYỂN ĐỐI VỚI ĐƠN H&Agrave;NG ONLINE</h3>\r\n<ul>\r\n<li><a href=\"https://savani.vn/\"><strong>Savani</strong></a>&nbsp;hỗ trợ ph&iacute; đổi h&agrave;ng 2 chiều cho c&aacute;c đơn h&agrave;ng online trong trường hợp: h&agrave;ng bị lỗi từ nh&agrave; sản xuất, giao kh&ocirc;ng đ&uacute;ng mẫu hoặc kh&ocirc;ng đ&uacute;ng size kh&aacute;ch y&ecirc;u cầu</li>\r\n<li>Free ship với tất cả c&aacute;c đơn h&agrave;ng c&oacute; gi&aacute; trị từ 499.000đ trở l&ecirc;n.</li>\r\n<li>Hỗ trợ đổi h&agrave;ng trong v&ograve;ng 30 ng&agrave;y v&agrave; miễn ph&iacute; tại tất cả chi nh&aacute;nh thuộc hệ thống thời trang Savani</li>\r\n</ul>\r\n</div>', 'http://127.0.0.1:8000/storage/product/eCXPhpllPl8TaiEcOx3uJhrIQIA91WAzLh8QIkp1.webp', 'http://127.0.0.1:8000/storage/product/ZZFtyNm50R9tKa9gdT1Oe5FgoJzZLtN6wBA1BEBl.webp,http://127.0.0.1:8000/storage/product/sSwCgkoOEv2SJ3BfpOTfuPswte4ad7LXjXF6pLO7.webp,http://127.0.0.1:8000/storage/product/GxfF4AK3LXKaTWgtCjin90W9vgoX2w29hNu6Ts2U.webp', 900000, 800000, 100, 4, 2, 2, NULL, NULL, 'ĐANG HOẠT ĐỘNG', '2024-11-05 11:31:08', '2024-11-05 18:31:08'),
 (4, '(Mới) Mã B6195 Giá 2310K: Dây Lưng Nam Gutde Đồng Hồ Phụ Kiện Nam Chất Liệu Da Bò G05 Sản Phẩm Mới, (Miễn Phí Vận Chuyển Toàn Quốc).', '<h4 class=\"hidden-sm hidden-xs\">(Mới) M&atilde; B6195 Gi&aacute; 2310K: D&acirc;y Lưng Nam Gutde Đồng Hồ Phụ Kiện Nam Chất Liệu Da B&ograve; G05 Sản Phẩm Mới, (Miễn Ph&iacute; Vận Chuyển To&agrave;n Quốc).</h4>', '<p><img src=\"https://cbu01.alicdn.com/img/ibank/O1CN01NBUdgh1rUsc9zneJS_!!3841055635-0-cib.jpg\"></p>', 'http://127.0.0.1:8000/storage/product/p4tsi32WUJEcW0X6KvSa3BCoto8OtWvZMevxG1nt.jpg', 'http://127.0.0.1:8000/storage/product/MnMQG3O1TTGa66XNsTTcDLmmqEUvGaXKiCOpCYjq.jpg,http://127.0.0.1:8000/storage/product/kYoIH0bODfOp0c6BtOLu2LaulRkjmIFIw2PmG3Ae.jpg,http://127.0.0.1:8000/storage/product/M5YMHZUMagZI3aIYQc8lLqHcu9UNFGhD8S74XAdl.jpg', 500000, 500000, 100, 2, 2, 2, NULL, NULL, 'ĐANG HOẠT ĐỘNG', '2024-11-05 11:33:50', '2024-11-05 18:33:50'),
 (5, '(Mới) Mã B9139 Giá 1300K: Quần Nam Sutder Big Size Ngoại Cỡ Hàng Mùa Hè Trung Niên Thời Trang Nam Chất Liệu G04 Sản Phẩm Mới, (Miễn Phí Vận Chuyển Toàn Quốc).', '<p>(Mới) M&atilde; B9139 Gi&aacute; 1300K: Quần Nam Sutder Big Size Ngoại Cỡ H&agrave;ng M&ugrave;a H&egrave; Trung Ni&ecirc;n Thời Trang Nam Chất Liệu G04 Sản Phẩm Mới, (Miễn Ph&iacute; Vận Chuyển To&agrave;n Quốc).</p>', '<p><img src=\"https://cbu01.alicdn.com/img/ibank/O1CN01G01dnm1spmSn6FbMP_!!2206365235816-0-cib.jpg\"></p>', 'http://127.0.0.1:8000/storage/product/Hf0nBMziT9u1Bm65bPmga9fiqT7giPvbdsjlWiE6.jpg', 'http://127.0.0.1:8000/storage/product/drZ0QW6pWsII5AkH5t2L6fSs2ozdpLzlQX5NEkAR.jpg,http://127.0.0.1:8000/storage/product/gZQmrO7CoShJ9lOaXWeqYIl0dEItMhTMWXqiDk4G.jpg,http://127.0.0.1:8000/storage/product/LDDUKoiUU7okT10zhOH9baChvwIieW1mRxXisxpH.jpg', 1900000, 1800000, 100, 4, 2, 2, NULL, NULL, 'ĐANG HOẠT ĐỘNG', '2024-11-05 11:37:00', '2024-11-05 18:37:00'),
-(6, '(Mới) Mã L2649 Giá 1220K: Áo Khoác Nam Sutdai Hàng Mùa Xuân Thu Đông Trung Niên Thời Trang Nam Chất Liệu G04 Sản Phẩm Mới, (Miễn Phí Vận Chuyển Toàn Quốc).', '<h4 class=\"hidden-sm hidden-xs\">(Mới) M&atilde; L2649 Gi&aacute; 1220K: &Aacute;o Kho&aacute;c Nam Sutdai H&agrave;ng M&ugrave;a Xu&acirc;n Thu Đ&ocirc;ng Trung Ni&ecirc;n Thời Trang Nam Chất Liệu G04 Sản Phẩm Mới, (Miễn Ph&iacute; Vận Chuyển To&agrave;n Quốc).</h4>', '<p><img src=\"https://188.com.vn/uploads/size-san-pham/bang-size-quan-ao.jpg\"></p>', 'http://127.0.0.1:8000/storage/product/NBihky1rmHhM52ykbagf1NHaHITyfgr2YXrjZepM.jpg', 'http://127.0.0.1:8000/storage/product/xsqFr8VBYtaVuH9VvnjEXyCTCOZ3WGzkR5xsg21w.jpg,http://127.0.0.1:8000/storage/product/t1DEt3hTMhLDPQtKGuvNVhWpVq9PrUZaLneXfATt.jpg,http://127.0.0.1:8000/storage/product/1xx9XIedRSjaO9nvDF3j1TBd2s0ke4OIECamdrDO.jpg', 1500000, 1200000, 100, 4, 2, 2, NULL, NULL, 'ĐANG HOẠT ĐỘNG', '2024-11-05 11:40:08', '2024-11-05 18:40:08');
+(6, '(Mới) Mã L2649 Giá 1220K: Áo Khoác Nam Sutdai Hàng Mùa Xuân Thu Đông Trung Niên Thời Trang Nam Chất Liệu G04 Sản Phẩm Mới, (Miễn Phí Vận Chuyển Toàn Quốc).', '<h4 class=\"hidden-sm hidden-xs\">(Mới) M&atilde; L2649 Gi&aacute; 1220K: &Aacute;o Kho&aacute;c Nam Sutdai H&agrave;ng M&ugrave;a Xu&acirc;n Thu Đ&ocirc;ng Trung Ni&ecirc;n Thời Trang Nam Chất Liệu G04 Sản Phẩm Mới, (Miễn Ph&iacute; Vận Chuyển To&agrave;n Quốc).</h4>', '<p><img src=\"https://188.com.vn/uploads/size-san-pham/bang-size-quan-ao.jpg\"></p>', 'http://127.0.0.1:8000/storage/product/NBihky1rmHhM52ykbagf1NHaHITyfgr2YXrjZepM.jpg', 'http://127.0.0.1:8000/storage/product/xsqFr8VBYtaVuH9VvnjEXyCTCOZ3WGzkR5xsg21w.jpg,http://127.0.0.1:8000/storage/product/t1DEt3hTMhLDPQtKGuvNVhWpVq9PrUZaLneXfATt.jpg,http://127.0.0.1:8000/storage/product/1xx9XIedRSjaO9nvDF3j1TBd2s0ke4OIECamdrDO.jpg', 1500000, 1200000, 389, 4, 2, 2, NULL, NULL, 'ĐANG HOẠT ĐỘNG', '2024-11-05 11:40:08', '2024-11-07 02:43:40');
 
 -- --------------------------------------------------------
 
@@ -373,7 +407,7 @@ CREATE TABLE `product_options` (
 --
 
 INSERT INTO `product_options` (`id`, `product_id`, `user_id`, `quantity`, `price`, `sale_price`, `thumbnail`, `value`, `description`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 100, 2400000, 2222000, 'http://127.0.0.1:8000/storage/product/8TtBYdUEOqi6Lft1a7mXMfNR5XqMrNBIAjfG7vJy.jpg', '[{\"attribute_item\":\"4\",\"property_item\":\"7\"},{\"attribute_item\":\"3\",\"property_item\":\"17\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"},{\"attribute_item\":\"1\",\"property_item\":\"1\"}]', '', '2024-11-05 11:21:35', '2024-11-05 11:21:35'),
+(1, 1, 2, 88, 2400000, 2222000, 'http://127.0.0.1:8000/storage/product/8TtBYdUEOqi6Lft1a7mXMfNR5XqMrNBIAjfG7vJy.jpg', '[{\"attribute_item\":\"4\",\"property_item\":\"7\"},{\"attribute_item\":\"3\",\"property_item\":\"17\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"},{\"attribute_item\":\"1\",\"property_item\":\"1\"}]', '', '2024-11-05 11:21:35', '2024-11-07 02:33:00'),
 (2, 1, 2, 120, 2399998, 2250000, 'http://127.0.0.1:8000/storage/product/8TtBYdUEOqi6Lft1a7mXMfNR5XqMrNBIAjfG7vJy.jpg', '[{\"attribute_item\":\"4\",\"property_item\":\"7\"},{\"attribute_item\":\"3\",\"property_item\":\"17\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"},{\"attribute_item\":\"1\",\"property_item\":\"2\"}]', '', '2024-11-05 11:21:35', '2024-11-05 11:21:35'),
 (3, 1, 2, 150, 2399999, 2198999, 'http://127.0.0.1:8000/storage/product/8TtBYdUEOqi6Lft1a7mXMfNR5XqMrNBIAjfG7vJy.jpg', '[{\"attribute_item\":\"4\",\"property_item\":\"7\"},{\"attribute_item\":\"3\",\"property_item\":\"17\"},{\"attribute_item\":\"2\",\"property_item\":\"12\"},{\"attribute_item\":\"1\",\"property_item\":\"1\"}]', '', '2024-11-05 11:21:35', '2024-11-05 11:21:35'),
 (4, 1, 2, 100, 2400000, 2100002, 'http://127.0.0.1:8000/storage/product/8TtBYdUEOqi6Lft1a7mXMfNR5XqMrNBIAjfG7vJy.jpg', '[{\"attribute_item\":\"4\",\"property_item\":\"7\"},{\"attribute_item\":\"3\",\"property_item\":\"17\"},{\"attribute_item\":\"2\",\"property_item\":\"12\"},{\"attribute_item\":\"1\",\"property_item\":\"2\"}]', '', '2024-11-05 11:21:35', '2024-11-05 11:21:35'),
@@ -383,22 +417,22 @@ INSERT INTO `product_options` (`id`, `product_id`, `user_id`, `quantity`, `price
 (8, 2, 2, 100, 1300000, 1090001, 'http://127.0.0.1:8000/storage/product/X7IdxdCFq7pmundZvpOZVBBhzlOWpamblDjdF3Cx.jpg', '[{\"attribute_item\":\"2\",\"property_item\":\"12\"},{\"attribute_item\":\"1\",\"property_item\":\"5\"}]', '', '2024-11-05 11:25:52', '2024-11-05 11:25:52'),
 (9, 2, 2, 100, 1300000, 1100000, 'http://127.0.0.1:8000/storage/product/X7IdxdCFq7pmundZvpOZVBBhzlOWpamblDjdF3Cx.jpg', '[{\"attribute_item\":\"2\",\"property_item\":\"12\"},{\"attribute_item\":\"1\",\"property_item\":\"4\"}]', '', '2024-11-05 11:25:52', '2024-11-05 11:25:52'),
 (10, 2, 2, 100, 1300000, 1110000, 'http://127.0.0.1:8000/storage/product/X7IdxdCFq7pmundZvpOZVBBhzlOWpamblDjdF3Cx.jpg', '[{\"attribute_item\":\"2\",\"property_item\":\"12\"},{\"attribute_item\":\"1\",\"property_item\":\"3\"}]', '', '2024-11-05 11:25:52', '2024-11-05 11:25:52'),
-(11, 3, 2, 100, 900000, 888000, 'http://127.0.0.1:8000/storage/product/eCXPhpllPl8TaiEcOx3uJhrIQIA91WAzLh8QIkp1.webp', '[{\"attribute_item\":\"1\",\"property_item\":\"2\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"}]', '', '2024-11-05 11:31:08', '2024-11-05 11:31:08'),
+(11, 3, 2, 98, 900000, 888000, 'http://127.0.0.1:8000/storage/product/eCXPhpllPl8TaiEcOx3uJhrIQIA91WAzLh8QIkp1.webp', '[{\"attribute_item\":\"1\",\"property_item\":\"2\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"}]', '', '2024-11-05 11:31:08', '2024-11-07 02:31:37'),
 (12, 3, 2, 100, 900000, 850000, 'http://127.0.0.1:8000/storage/product/eCXPhpllPl8TaiEcOx3uJhrIQIA91WAzLh8QIkp1.webp', '[{\"attribute_item\":\"1\",\"property_item\":\"3\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"}]', '', '2024-11-05 11:31:08', '2024-11-05 11:31:08'),
 (13, 3, 2, 100, 900000, 800001, 'http://127.0.0.1:8000/storage/product/eCXPhpllPl8TaiEcOx3uJhrIQIA91WAzLh8QIkp1.webp', '[{\"attribute_item\":\"1\",\"property_item\":\"4\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"}]', '', '2024-11-05 11:31:08', '2024-11-05 11:31:08'),
 (14, 3, 2, 100, 900000, 888000, 'http://127.0.0.1:8000/storage/product/eCXPhpllPl8TaiEcOx3uJhrIQIA91WAzLh8QIkp1.webp', '[{\"attribute_item\":\"1\",\"property_item\":\"5\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"}]', '', '2024-11-05 11:31:08', '2024-11-05 11:31:08'),
 (15, 3, 2, 100, 900000, 850000, 'http://127.0.0.1:8000/storage/product/eCXPhpllPl8TaiEcOx3uJhrIQIA91WAzLh8QIkp1.webp', '[{\"attribute_item\":\"1\",\"property_item\":\"2\"},{\"attribute_item\":\"2\",\"property_item\":\"12\"}]', '', '2024-11-05 11:31:08', '2024-11-05 11:31:08'),
 (16, 3, 2, 100, 900000, 888000, 'http://127.0.0.1:8000/storage/product/eCXPhpllPl8TaiEcOx3uJhrIQIA91WAzLh8QIkp1.webp', '[{\"attribute_item\":\"1\",\"property_item\":\"4\"},{\"attribute_item\":\"2\",\"property_item\":\"12\"}]', '', '2024-11-05 11:31:08', '2024-11-05 11:31:08'),
 (17, 3, 2, 100, 900000, 899000, 'http://127.0.0.1:8000/storage/product/eCXPhpllPl8TaiEcOx3uJhrIQIA91WAzLh8QIkp1.webp', '[{\"attribute_item\":\"1\",\"property_item\":\"3\"},{\"attribute_item\":\"2\",\"property_item\":\"12\"}]', '', '2024-11-05 11:31:08', '2024-11-05 11:31:08'),
-(18, 4, 2, 100, 190000, 160000, 'http://127.0.0.1:8000/storage/product/p4tsi32WUJEcW0X6KvSa3BCoto8OtWvZMevxG1nt.jpg', '[{\"attribute_item\":\"1\",\"property_item\":\"5\"}]', '', '2024-11-05 11:33:50', '2024-11-05 11:33:50'),
+(18, 4, 2, 91, 190000, 160000, 'http://127.0.0.1:8000/storage/product/p4tsi32WUJEcW0X6KvSa3BCoto8OtWvZMevxG1nt.jpg', '[{\"attribute_item\":\"1\",\"property_item\":\"5\"}]', '', '2024-11-05 11:33:50', '2024-11-07 02:32:36'),
 (19, 4, 2, 100, 190000, 170000, 'http://127.0.0.1:8000/storage/product/p4tsi32WUJEcW0X6KvSa3BCoto8OtWvZMevxG1nt.jpg', '[{\"attribute_item\":\"1\",\"property_item\":\"1\"}]', '', '2024-11-05 11:33:50', '2024-11-05 11:33:50'),
 (20, 4, 2, 100, 190000, 180000, 'http://127.0.0.1:8000/storage/product/p4tsi32WUJEcW0X6KvSa3BCoto8OtWvZMevxG1nt.jpg', '[{\"attribute_item\":\"1\",\"property_item\":\"2\"}]', '', '2024-11-05 11:33:50', '2024-11-05 11:33:50'),
-(21, 5, 2, 100, 1900000, 1800000, 'http://127.0.0.1:8000/storage/product/Hf0nBMziT9u1Bm65bPmga9fiqT7giPvbdsjlWiE6.jpg', '[{\"attribute_item\":\"1\",\"property_item\":\"2\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"}]', '', '2024-11-05 11:37:00', '2024-11-05 11:37:00'),
+(21, 5, 2, 93, 1900000, 1800000, 'http://127.0.0.1:8000/storage/product/Hf0nBMziT9u1Bm65bPmga9fiqT7giPvbdsjlWiE6.jpg', '[{\"attribute_item\":\"1\",\"property_item\":\"2\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"}]', '', '2024-11-05 11:37:00', '2024-11-07 02:32:36'),
 (22, 5, 2, 100, 1900000, 1799999, 'http://127.0.0.1:8000/storage/product/Hf0nBMziT9u1Bm65bPmga9fiqT7giPvbdsjlWiE6.jpg', '[{\"attribute_item\":\"1\",\"property_item\":\"2\"},{\"attribute_item\":\"2\",\"property_item\":\"12\"}]', '', '2024-11-05 11:37:00', '2024-11-05 11:37:00'),
 (23, 5, 2, 100, 1900000, 1699999, 'http://127.0.0.1:8000/storage/product/Hf0nBMziT9u1Bm65bPmga9fiqT7giPvbdsjlWiE6.jpg', '[{\"attribute_item\":\"1\",\"property_item\":\"5\"},{\"attribute_item\":\"2\",\"property_item\":\"13\"}]', '', '2024-11-05 11:37:00', '2024-11-05 11:37:00'),
 (24, 5, 2, 100, 1900000, 1500000, 'http://127.0.0.1:8000/storage/product/Hf0nBMziT9u1Bm65bPmga9fiqT7giPvbdsjlWiE6.jpg', '[{\"attribute_item\":\"1\",\"property_item\":\"5\"},{\"attribute_item\":\"2\",\"property_item\":\"12\"}]', '', '2024-11-05 11:37:00', '2024-11-05 11:37:00'),
-(25, 6, 2, 200, 1500000, 1100000, 'http://127.0.0.1:8000/storage/product/NBihky1rmHhM52ykbagf1NHaHITyfgr2YXrjZepM.jpg', '[{\"attribute_item\":\"2\",\"property_item\":\"13\"},{\"attribute_item\":\"1\",\"property_item\":\"2\"}]', '', '2024-11-05 11:40:08', '2024-11-05 11:40:08'),
-(26, 6, 2, 200, 1500000, 1000000, 'http://127.0.0.1:8000/storage/product/NBihky1rmHhM52ykbagf1NHaHITyfgr2YXrjZepM.jpg', '[{\"attribute_item\":\"2\",\"property_item\":\"12\"},{\"attribute_item\":\"1\",\"property_item\":\"1\"}]', '', '2024-11-05 11:40:08', '2024-11-05 11:40:08');
+(27, 6, 2, 189, 1500000, 1100000, 'http://127.0.0.1:8000/storage/product/NBihky1rmHhM52ykbagf1NHaHITyfgr2YXrjZepM.jpg', '[{\"attribute_item\":\"2\",\"property_item\":\"13\"},{\"attribute_item\":\"1\",\"property_item\":\"2\"}]', '', '2024-11-07 02:43:40', '2024-11-07 02:43:40'),
+(28, 6, 2, 200, 1500000, 1000000, 'http://127.0.0.1:8000/storage/product/NBihky1rmHhM52ykbagf1NHaHITyfgr2YXrjZepM.jpg', '[{\"attribute_item\":\"2\",\"property_item\":\"12\"},{\"attribute_item\":\"1\",\"property_item\":\"1\"}]', '', '2024-11-07 02:43:40', '2024-11-07 02:43:40');
 
 -- --------------------------------------------------------
 
@@ -455,6 +489,21 @@ CREATE TABLE `revenues` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `revenues`
+--
+
+INSERT INTO `revenues` (`id`, `total`, `date`, `month`, `year`, `order_id`, `created_at`, `updated_at`) VALUES
+(1, '24442000', '7', '1', '2024', 9, '2024-01-07 02:33:33', '2024-01-07 02:33:33'),
+(2, '11160000', '7', '2', '2024', 1, '2024-02-07 02:33:41', '2024-02-07 02:33:41'),
+(3, '800000', '7', '3', '2024', 2, '2024-03-07 02:33:48', '2024-03-07 02:33:48'),
+(4, '10800000', '7', '4', '2024', 3, '2024-04-07 02:33:54', '2024-04-07 02:33:54'),
+(5, '3110000', '7', '5', '2024', 4, '2024-05-07 02:34:02', '2024-05-07 02:34:02'),
+(6, '160000', '7', '8', '2024', 5, '2024-08-07 02:34:10', '2024-08-07 02:34:10'),
+(7, '888000', '7', '9', '2024', 6, '2024-09-07 02:34:19', '2024-09-07 02:34:19'),
+(8, '1260000', '7', '10', '2024', 7, '2024-10-07 02:34:59', '2024-10-07 02:34:59'),
+(9, '1960000', '7', '11', '2024', 8, '2024-11-07 02:35:07', '2024-11-07 02:35:07');
 
 -- --------------------------------------------------------
 
@@ -713,7 +762,7 @@ ALTER TABLE `attributes`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -755,13 +804,13 @@ ALTER TABLE `my_coupons`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -779,7 +828,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `product_options`
 --
 ALTER TABLE `product_options`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `properties`
@@ -791,7 +840,7 @@ ALTER TABLE `properties`
 -- AUTO_INCREMENT for table `revenues`
 --
 ALTER TABLE `revenues`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `reviews`
