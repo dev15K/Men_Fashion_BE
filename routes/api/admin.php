@@ -72,6 +72,7 @@ Route::group(['prefix' => 'reviews'], function () {
 
 Route::group(['prefix' => 'revenues'], function () {
     Route::get('list', [AdminRevenueApi::class, 'list'])->name('api.admin.revenues.list');
+    Route::get('charts', [AdminRevenueApi::class, 'charts'])->name('api.admin.revenues.charts');
 });
 
 Route::group(['prefix' => 'coupons'], function () {
