@@ -57,14 +57,18 @@ class AdminRevenueApi extends Controller
             now()->endOfMonth()
         ])->get();
 
+        $total = 0;
+
         foreach ($revenues as $revenue) {
             $monthIndex = now()->diffInMonths($revenue->created_at->startOfMonth());
             if ($monthIndex < 12) {
                 $yData[11 - $monthIndex] += $revenue->total;
             }
+
+            $total += $revenue->total;
         }
 
-        $res = ['x_data' => $xData, 'y_data' => $yData];
+        $res = ['x_data' => $xData, 'y_data' => $yData, 'total' => $total];
         $data = returnMessage(1, $res, 'Success');
         return response($data, 200);
     }
