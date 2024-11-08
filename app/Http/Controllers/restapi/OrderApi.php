@@ -169,6 +169,16 @@ class OrderApi extends Api
                 return response($data, 404);
             }
 
+            if ($order->status == OrderStatus::CANCELED) {
+                $data = returnMessage(0, null, 'Đơn hàng đã huỷ!');
+                return response($data, 400);
+            }
+
+            if ($order->status == OrderStatus::COMPLETED) {
+                $data = returnMessage(0, null, 'Đơn hàng đã hoàn thành!');
+                return response($data, 400);
+            }
+
             $reason_cancel = $request->input('reason_cancel');
 
             $order->status = OrderStatus::CANCELED;
