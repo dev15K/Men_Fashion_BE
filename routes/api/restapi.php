@@ -13,6 +13,7 @@
 
 use App\Http\Controllers\restapi\AttributeApi;
 use App\Http\Controllers\restapi\CategoryApi;
+use App\Http\Controllers\restapi\ContactApi;
 use App\Http\Controllers\restapi\CouponApi;
 use App\Http\Controllers\restapi\ProductApi;
 use App\Http\Controllers\restapi\PropertyApi;
@@ -46,4 +47,8 @@ Route::group(['prefix' => 'coupons'], function () {
     Route::get('list', [CouponApi::class, 'list'])->name('api.auth.coupons.list');
     Route::get('detail/{id}', [CouponApi::class, 'detail'])->name('api.auth.coupons.detail');
     Route::post('search', [CouponApi::class, 'search'])->name('api.auth.coupons.search');
+});
+
+Route::group(['prefix' => 'contacts'], function () {
+    Route::post('create', [ContactApi::class, 'create'])->name('api.restapi.contacts.create');
 });
