@@ -23,7 +23,7 @@ class AdminRevenueApi extends Controller
      */
     public function list()
     {
-        $revenues = Revenues::all();
+        $revenues = Revenues::orderBy('id', 'desc')->get();
         $data = returnMessage(1, $revenues, 'Success');
         return response($data, 200);
     }

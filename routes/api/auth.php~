@@ -59,7 +59,6 @@ Route::group(['prefix' => 'my-coupons'], function () {
     Route::post('save', [MyCouponApi::class, 'saveCoupon'])->name('api.auth.my.coupons.save');
     Route::delete('delete', [MyCouponApi::class, 'delete'])->name('api.auth.my.coupons.delete');
 });
-
 Route::group(['prefix' => 'order-histories'], function () {
     Route::get('list', [OrderHistoryApi::class, 'list'])->name('api.auth.order.histories.list');
 });

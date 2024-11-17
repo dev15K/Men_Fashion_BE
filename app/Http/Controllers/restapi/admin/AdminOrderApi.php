@@ -4,7 +4,7 @@ namespace App\Http\Controllers\restapi\admin;
 
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Api;
-use App\Http\Controllers\Controller;
+use App\Models\OrderHistories;
 use App\Models\OrderItems;
 use App\Models\Orders;
 use App\Models\ProductOptions;
@@ -17,6 +17,18 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminOrderApi extends Api
 {
+    protected $user;
+
+    /**
+     * Instantiate a new CheckoutController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->user = JWTAuth::parseToken()->authenticate()->toArray();
+    }
+
     /**
      * @OA\Get(
      *     path="/api/admin/orders/list",
@@ -181,7 +193,6 @@ class AdminOrderApi extends Api
     public function update($id, Request $request)
     {
         try {
-            $status = $request->input('status');
             $order = Orders::find($id);
             if (!$order || $order->status == OrderStatus::DELETED) {
                 $data = returnMessage(0, null, 'Order not found');
@@ -198,13 +209,29 @@ class AdminOrderApi extends Api
                 return response($data, 400);
             }
 
-            $order->status = $status ?? OrderStatus::CANCELED;
+            $status = $request->input('status') ?? $order->status;
+
+            switch ($status) {
+                case OrderStatus::PROCESSING:
+                    $status = OrderStatus::SHIPPING;
+                    break;
+                case OrderStatus::SHIPPING:
+                    $status = OrderStatus::DELIVERED;
+                    break;
+                case OrderStatus::CANCELED:
+                    $status = OrderStatus::CANCELED;
+                    break;
+                default:
+                    $status = OrderStatus::COMPLETED;
+                    break;
+            }
+
+            $order->status = $status;
             $order->save();
+
             if ($status == OrderStatus::CANCELED) {
-                $order->order_items->each(function ($item) {
-//                    $item->product->update([
-//                        'quantity' => $item->product->quantity + $item->quantity
-//                    ]);
+                $order_items = OrderItems::where('order_id', $order->id)->get();
+                $order_items->each(function ($item) {
                     $option = ProductOptions::find($item->value);
                     $option->quantity = $option->quantity + $item->quantity;
                     $option->save();
@@ -222,6 +249,13 @@ class AdminOrderApi extends Api
 
                 $revenue->save();
             }
+
+            $order_history = new OrderHistories();
+            $order_history->order_id = $order->id;
+            $order_history->status = $status;
+            $order_history->user_id = $this->user['id'];
+            $order_history->save();
+
             $data = returnMessage(1, $order, 'Update order success');
             return response($data, 200);
         } catch (\Exception $exception) {

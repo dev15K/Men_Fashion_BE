@@ -5,9 +5,7 @@ namespace App\Http\Controllers\restapi\admin;
 use App\Enums\OrderStatus;
 use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
-use App\Models\OrderItems;
 use App\Models\Orders;
-use App\Models\Products;
 use App\Models\Revenues;
 use App\Models\User;
 use Carbon\Carbon;
@@ -38,7 +36,7 @@ class AdminHomeApi extends Controller
                 'order_action' => $this->calculateOrder($type, $size, $sort, $keyword),
                 'member_action' => $this->calculateMembers($type, $size, $sort, $keyword),
                 'revenue_action' => $this->calculateRevenue($type, $size, $sort, $keyword),
-                'products_action' => $this->getTopProduct($type, $size, $sort, $keyword),
+                'product_action' => $this->getTopProduct($type, $size, $sort, $keyword),
             ];
 
             $res = returnMessage(1, $data, 'Success');
@@ -48,6 +46,32 @@ class AdminHomeApi extends Controller
             $data = returnMessage(-1, '', $exception->getMessage());
             return response($data, 400);
         }
+    }
+
+    public function chartOrders(Request $request)
+    {
+        $type = $request->input('type');
+
+        $orders = Orders::where('status', '!=', OrderStatus::DELETED)->get();
+        $count = $orders->count();
+
+        $processOrders = $orders->where('status', OrderStatus::PROCESSING)->count();
+        $shippingOrders = $orders->where('status', OrderStatus::SHIPPING)->count();
+        $deliveredOrders = $orders->where('status', OrderStatus::DELIVERED)->count();
+        $canceledOrders = $orders->where('status', OrderStatus::CANCELED)->count();
+        $completedOrders = $orders->where('status', OrderStatus::COMPLETED)->count();
+
+        $data = [
+            'total' => $count,
+            'process' => $processOrders,
+            'shipping' => $shippingOrders,
+            'delivered' => $deliveredOrders,
+            'completed' => $completedOrders,
+            'canceled' => $canceledOrders
+        ];
+
+        $res = returnMessage(1, $data, 'Success');
+        return response($res, 200);
     }
 
     public function getTopProduct($type, $size, $sort, $keyword)

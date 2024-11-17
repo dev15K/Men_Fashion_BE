@@ -5,9 +5,7 @@ namespace App\Http\Controllers\restapi\admin;
 use App\Enums\OrderStatus;
 use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
-use App\Models\OrderItems;
 use App\Models\Orders;
-use App\Models\Products;
 use App\Models\Revenues;
 use App\Models\User;
 use Carbon\Carbon;
@@ -48,6 +46,56 @@ class AdminHomeApi extends Controller
             $data = returnMessage(-1, '', $exception->getMessage());
             return response($data, 400);
         }
+    }
+
+    public function chartOrders(Request $request)
+    {
+        $type = $request->input('type');
+        $date = Carbon::now();
+
+        $query = Orders::where('status', '!=', OrderStatus::DELETED);
+
+        switch ($type) {
+            case 'day':
+                if ($date) {
+                    $query->whereDate('created_at', $date);
+                }
+                break;
+            case 'year':
+                if ($date) {
+                    $year = date('Y', strtotime($date));
+                    $query->whereYear('created_at', $year);
+                }
+                break;
+
+            default:
+                if ($date) {
+                    $month = date('m', strtotime($date));
+                    $year = date('Y', strtotime($date));
+                    $query->whereMonth('created_at', $month)->whereYear('created_at', $year);
+                }
+                break;
+        }
+
+        $orders = $query->get();
+        $count = $orders->count();
+        $processOrders = $orders->where('status', OrderStatus::PROCESSING)->count();
+        $shippingOrders = $orders->where('status', OrderStatus::SHIPPING)->count();
+        $deliveredOrders = $orders->where('status', OrderStatus::DELIVERED)->count();
+        $canceledOrders = $orders->where('status', OrderStatus::CANCELED)->count();
+        $completedOrders = $orders->where('status', OrderStatus::COMPLETED)->count();
+
+        $data = [
+            'total' => $count,
+            'process' => $processOrders,
+            'shipping' => $shippingOrders,
+            'delivered' => $deliveredOrders,
+            'completed' => $completedOrders,
+            'canceled' => $canceledOrders
+        ];
+
+        $res = returnMessage(1, $data, 'Success');
+        return response($res, 200);
     }
 
     public function getTopProduct($type, $size, $sort, $keyword)
