@@ -193,6 +193,7 @@ class AdminOrderApi extends Api
     public function update($id, Request $request)
     {
         try {
+            $reason_cancel = $request->input('reason_cancel');
             $order = Orders::find($id);
             if (!$order || $order->status == OrderStatus::DELETED) {
                 $data = returnMessage(0, null, 'Order not found');
@@ -219,6 +220,8 @@ class AdminOrderApi extends Api
                     $status = OrderStatus::DELIVERED;
                     break;
                 case OrderStatus::CANCELED:
+
+                    $order->reason_cancel = $reason_cancel;
                     $status = OrderStatus::CANCELED;
                     break;
                 default:
