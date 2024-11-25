@@ -5,15 +5,11 @@ namespace App\Http\Controllers\restapi;
 use App\Enums\OrderStatus;
 use App\Enums\ReviewStatus;
 use App\Http\Controllers\Api;
-use App\Http\Controllers\Controller;
-use App\Models\OrderItems;
 use App\Models\Orders;
-use App\Models\Products;
 use App\Models\Reviews;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use OpenApi\Annotations as OA;
 
 class ReviewProductApi extends Api
 {
@@ -150,18 +146,24 @@ class ReviewProductApi extends Api
         $review = null;
 
         if ($product_id && $order_id) {
-            $review = Reviews::where('product_id', $product_id)
-                ->where('order_id', $order_id)
+            $order = Orders::where('id', $order_id)
                 ->where('user_id', $user['id'])
+                ->where('status', OrderStatus::COMPLETED)
                 ->first();
+            if ($order) {
+                $review = Reviews::where('product_id', $product_id)
+                    ->where('order_id', $order_id)
+                    ->where('user_id', $user['id'])
+                    ->first();
 
-            if ($review) {
-                $user = User::find($review->user_id);
-                $review = $review->toArray();
-                $review['user'] = $user->toArray();
+                if ($review) {
+                    $user = User::find($review->user_id);
+                    $review = $review->toArray();
+                    $review['user'] = $user->toArray();
 
-                $isValid = true;
-                $orderID = $order_id;
+                    $isValid = true;
+                    $orderID = $order_id;
+                }
             }
         }
 
