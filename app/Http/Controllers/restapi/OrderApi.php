@@ -195,6 +195,7 @@ class OrderApi extends Api
             $order_history->order_id = $order->id;
             $order_history->status = OrderStatus::CANCELED;
             $order_history->user_id = $order->user_id;
+            $order_history->notes = $order->reason_cancel;
             $order_history->save();
 
             $data = returnMessage(1, $order, 'Cancel success');

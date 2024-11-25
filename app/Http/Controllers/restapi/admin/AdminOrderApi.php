@@ -256,6 +256,7 @@ class AdminOrderApi extends Api
             $order_history = new OrderHistories();
             $order_history->order_id = $order->id;
             $order_history->status = $status;
+            $order_history->notes = $order->reason_cancel;
             $order_history->user_id = $this->user['id'];
             $order_history->save();
 
