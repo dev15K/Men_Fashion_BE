@@ -167,6 +167,16 @@ class OrderApi extends Api
                 return response($data, 404);
             }
 
+            if ($order->status == OrderStatus::CONFIRMED) {
+                $data = returnMessage(0, null, 'Đơn hàng đã được xác nhận!');
+                return response($data, 400);
+            }
+
+            if ($order->status == OrderStatus::SHIPPING) {
+                $data = returnMessage(0, null, 'Đơn hàng đang vận chuyển!');
+                return response($data, 400);
+            }
+
             if ($order->status == OrderStatus::CANCELED) {
                 $data = returnMessage(0, null, 'Đơn hàng đã huỷ!');
                 return response($data, 400);
