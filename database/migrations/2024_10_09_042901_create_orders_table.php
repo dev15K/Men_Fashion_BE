@@ -33,7 +33,7 @@ return new class extends Migration
             $table->longText('notes')->nullable()->comment('Ghi chú của khách hàng');
 
             $table->string('order_method')->default(OrderMethod::IMMEDIATE);
-            $table->string('status')->default(OrderStatus::PROCESSING);
+            $table->string('status')->default(OrderStatus::PENDING);
 
             $table->timestamps();
         });

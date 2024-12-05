@@ -394,7 +394,7 @@ class CheckoutApi extends Api
         $total = $request->input('c_total');
         $notes = $request->input('c_order_notes');
         $order_method = $request->input('order_method') ?? OrderMethod::IMMEDIATE;
-        $status = OrderStatus::PROCESSING;
+        $status = OrderStatus::PENDING;
 
         $address = $c_address . ', ' . $d_address;
 
@@ -460,7 +460,7 @@ class CheckoutApi extends Api
 
         $order_history = new OrderHistories();
         $order_history->order_id = $order->id;
-        $order_history->status = OrderStatus::PROCESSING;
+        $order_history->status = OrderStatus::PENDING;
         $order_history->user_id = $order->user_id;
         $order_history->save();
 

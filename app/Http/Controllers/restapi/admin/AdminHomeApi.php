@@ -79,7 +79,9 @@ class AdminHomeApi extends Controller
 
         $orders = $query->get();
         $count = $orders->count();
+        $pendingOrders = $orders->where('status', OrderStatus::PENDING)->count();
         $processOrders = $orders->where('status', OrderStatus::PROCESSING)->count();
+        $confirmOrders = $orders->where('status', OrderStatus::CONFIRMED)->count();
         $shippingOrders = $orders->where('status', OrderStatus::SHIPPING)->count();
         $deliveredOrders = $orders->where('status', OrderStatus::DELIVERED)->count();
         $canceledOrders = $orders->where('status', OrderStatus::CANCELED)->count();
@@ -87,7 +89,9 @@ class AdminHomeApi extends Controller
 
         $data = [
             'total' => $count,
+            'pending' => $pendingOrders,
             'process' => $processOrders,
+            'confirm' => $confirmOrders,
             'shipping' => $shippingOrders,
             'delivered' => $deliveredOrders,
             'completed' => $completedOrders,
